@@ -6,7 +6,11 @@ Importēto datu struktūra atšķiras no iestāžu publicētajiem datiem - tā i
 
 Skripti veidoti izpildīšanai Linux operētājsistēmās, taču ar nelielām izmaiņām tos iespējams lietot arī citās, tai skaitā Windows.
 
-Bash skripti veidoti, lai ar cron varētu ieplānot to automātisku izpildi. Piemēram, lai izsauktu Adrešu registra datu automātisku atjaunošanu katru darbdienas rītu (5.20 pēc Griničas laika), Crontab pievienojams ieraksts `20 05 * * 1-5 /path/to/aw_csv.sh` (`/path/to/` vietā jānorādā pilns ceļš uz datni). Crontab rediģē ar komandu `crontab -e`. Jāņem vērā, ka skriptiem jābūt izpildāmiem, ko piemēra gadījumā iespējams īstenot ar komandu `chmod +x /path/to/aw_csv.sh`. Izpildes laika pieraksta noteikšanai iespējams izmantot https://crontab.guru/.
+Bash skripti veidoti, lai ar cron varētu ieplānot to automātisku izpildi. Piemēram, lai izsauktu Adrešu registra datu automātisku atjaunošanu katru darbdienas rītu plkst. 8.20, Crontab pievienojams ieraksts `20 08 * * 1-5 /path/to/aw_csv.sh` (`/path/to/` vietā jānorādā pilns ceļš uz datni). Crontab rediģē ar komandu `crontab -e`. Jāņem vērā, ka skriptiem jābūt izpildāmiem, ko piemēra gadījumā iespējams īstenot ar komandu `chmod +x /path/to/aw_csv.sh`. Izpildes laika pieraksta noteikšanai iespējams izmantot https://crontab.guru/. Lai cron darbi tiktu izpildīti pēc vietējā laika, nevis saskaņotā pasaules laika (UTC): `sudo systemctl edit cron.service`
+
+Pievieno rindu: `TZ=Europe/Riga`
+
+`sudo systemctl restart cron`
 
 Nepieciešamā programmatūra:
 * PostgreSQL ar paplašinājumiem PostGIS un [PostgreSQL OGR Foreign Data Wrapper](https://github.com/pramsey/pgsql-ogr-fdw),
