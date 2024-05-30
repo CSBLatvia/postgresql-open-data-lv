@@ -10,11 +10,18 @@ AS (
     ,STRING_AGG(DISTINCT op2."PersonStatus", ', ' ORDER BY op2."PersonStatus") "PersonStatus"
   FROM vzd.nivkis_property_object p
   LEFT OUTER JOIN vzd.nivkis_ownership o2 ON p."ProCadastreNr" = o2."ObjectCadastreNr"
+    AND o2."ObjectCadastreNr" IS NOT NULL
   LEFT OUTER JOIN vzd.nivkis_ownership_status oo2 ON o2."OwnershipStatus" = oo2.id
   LEFT OUTER JOIN vzd.nivkis_ownership_personstatus op2 ON o2."PersonStatus" = op2.id
-  WHERE o2."ObjectCadastreNr" IS NOT NULL
   GROUP BY p."ObjectCadastreNrData"
     ,oo2."OwnershipStatus"
+  )
+  ,e
+AS (
+  SELECT "BuildingCadastreNr"
+    ,UNNEST("MaterialKindName") "MaterialKindName1"
+  FROM vzd.nivkis_building_element
+  WHERE "BuildingElementName" = 1
   )
   ,a
 AS (
@@ -22,7 +29,7 @@ AS (
     ,u."BuildingUseKindName"
     ,b."BuildingName"
     ,b."BuildingExploitYear"
-    ,UNNEST(e."MaterialKindName") "MaterialKindName1"
+    ,e."MaterialKindName1"
     ,m."MaterialKindName" "MaterialKindName2"
     ,b."BuildingGroundFloors"
     ,v."ARCode"
@@ -32,22 +39,21 @@ AS (
     ,a.geom
   FROM vzd.nivkis_buves a
   LEFT OUTER JOIN vzd.nivkis_building b ON a.code = b."BuildingCadastreNr"
-  LEFT OUTER JOIN vzd.nivkis_building_element e ON a.code = e."BuildingCadastreNr"
-    AND e."BuildingElementName" = 1
+    AND b.date_deleted IS NULL
+  LEFT OUTER JOIN e ON a.code = e."BuildingCadastreNr"
   LEFT OUTER JOIN vzd.nivkis_building_usekind u ON b."BuildingUseKindId" = u."BuildingUseKindId"
   LEFT OUTER JOIN vzd.nivkis_building_materialkind m ON b."MaterialKindId" = m."MaterialKindId"
   LEFT OUTER JOIN vzd.nivkis_address v ON a.code = v."ObjectCadastreNr"
+    AND v.date_deleted IS NULL
   LEFT OUTER JOIN vzd.adreses v2 ON v."ARCode" = v2.adr_cd
+    AND v2.dat_beig IS NULL
   LEFT OUTER JOIN p ON a.code = p."BuildingCadastreNr"
   LEFT OUTER JOIN vzd.nivkis_ownership o ON a.code = o."ObjectCadastreNr"
+    AND o.date_deleted IS NULL
   LEFT OUTER JOIN vzd.nivkis_ownership_status oo ON o."OwnershipStatus" = oo.id
   LEFT OUTER JOIN vzd.nivkis_ownership_personstatus op ON o."PersonStatus" = op.id
   WHERE a.date_deleted IS NULL
     AND a.object_code < 6000000000
-    AND b.date_deleted IS NULL
-    AND v.date_deleted IS NULL
-    AND v2.dat_beig IS NULL
-    AND o.date_deleted IS NULL
   )
   ,b
 AS (
