@@ -27,15 +27,20 @@ AS (
 AS (
   SELECT DISTINCT a.code "BuildingCadastreNr"
     ,u."BuildingUseKindName"
-    ,b."BuildingName"
+    ,COALESCE(b."BuildingName", r."BuildingName") "BuildingName"
     ,b."BuildingExploitYear"
     ,e."MaterialKindName1"
-    ,m."MaterialKindName" "MaterialKindName2"
-    ,b."BuildingGroundFloors"
-    ,v."ARCode"
-    ,v2.std
+    ,COALESCE(m."MaterialKindName", r."MaterialKindName") "MaterialKindName2"
+    ,COALESCE(b."BuildingGroundFloors", r."BuildingGroundFloors") "BuildingGroundFloors"
+    ,COALESCE(v."ARCode", v3.adr_cd) "ARCode"
+    ,COALESCE(v2.std, r."BuildingAddress") std
     ,COALESCE(oo."OwnershipStatus", p."OwnershipStatus") "OwnershipStatus"
     ,COALESCE(op."PersonStatus", p."PersonStatus") "PersonStatus"
+    ,CASE 
+      WHEN r."BuildingCadastreNr" IS NOT NULL
+        THEN true
+      ELSE NULL
+      END "Prereg"
     ,a.geom
   FROM vzd.nivkis_buves a
   LEFT OUTER JOIN vzd.nivkis_building b ON a.code = b."BuildingCadastreNr"
@@ -52,6 +57,9 @@ AS (
     AND o.date_deleted IS NULL
   LEFT OUTER JOIN vzd.nivkis_ownership_status oo ON o."OwnershipStatus" = oo.id
   LEFT OUTER JOIN vzd.nivkis_ownership_personstatus op ON o."PersonStatus" = op.id
+  LEFT OUTER JOIN vzd.nivkis_building_pre_reg r ON a.code = r."BuildingCadastreNr"
+  LEFT OUTER JOIN vzd.adreses v3 ON r."BuildingAddress" = v3.std
+    AND v3.dat_beig IS NULL
   WHERE a.date_deleted IS NULL
     AND a.object_code < 6000000000
   )
@@ -67,6 +75,7 @@ AS (
     ,std
     ,"OwnershipStatus"
     ,STRING_AGG(DISTINCT "PersonStatus", ', ' ORDER BY "PersonStatus") "PersonStatus"
+    ,"Prereg"
     ,geom
   FROM a
   GROUP BY "BuildingCadastreNr"
@@ -78,6 +87,7 @@ AS (
     ,"ARCode"
     ,std
     ,"OwnershipStatus"
+    ,"Prereg"
     ,geom
   )
   ,c
@@ -91,6 +101,7 @@ AS (
     ,"ARCode"
     ,std
     ,ARRAY_AGG("OwnershipStatus" || ': ' || "PersonStatus" ORDER BY "OwnershipStatus", "PersonStatus") "Ownership"
+    ,"Prereg"
     ,geom
   FROM b
   GROUP BY "BuildingCadastreNr"
@@ -101,6 +112,7 @@ AS (
     ,"BuildingGroundFloors"
     ,"ARCode"
     ,std
+    ,"Prereg"
     ,geom
   )
 SELECT "BuildingCadastreNr"
@@ -112,6 +124,7 @@ SELECT "BuildingCadastreNr"
   ,ARRAY_AGG(DISTINCT "ARCode" ORDER BY "ARCode") "ARCode"
   ,ARRAY_AGG(DISTINCT std ORDER BY std) std
   ,"Ownership"
+  ,"Prereg"
   ,geom
 FROM c
 GROUP BY "BuildingCadastreNr"
@@ -120,6 +133,7 @@ GROUP BY "BuildingCadastreNr"
   ,"BuildingExploitYear"
   ,"BuildingGroundFloors"
   ,"Ownership"
+  ,"Prereg"
   ,geom
 WITH NO DATA;
 

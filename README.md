@@ -113,8 +113,8 @@ Sākotnējā iestatīšana:
 
 Sākotnējā iestatīšana:
 
-1. Izpilda bash skriptu [kk_shp.sh](vzd/kk_shp.sh) bez PostgreSQL procedūras (lejupielādē datus).
-2. PostgreSQL izveido ārējo datu avotu, izpildot [ogr_fdw_kk_shp.sql](vzd/ogr_fdw_kk_shp.sql) (`/home/user` vietā jānorāda saknes direktorija).
+1. Izpilda bash skriptus [kk_shp.sh](vzd/kk_shp.sh) un [pre_reg_buildings.sh](vzd/pre_reg_buildings.sh) bez PostgreSQL procedūrām (lejupielādē datus).
+2. PostgreSQL izveido ārējo datu avotus, izpildot [ogr_fdw_kk_shp.sql](vzd/ogr_fdw_kk_shp.sql) un [ogr_fdw_pre_reg_buildings.sql](vzd/ogr_fdw_pre_reg_buildings.sql) (`/home/user` vietā jānorāda saknes direktorija).
 3. PostgreSQL izveido tabulas kadastra telpisko datu uzkrāšanai, izpildot [nivkis_init.sql](vzd/nivkis_init.sql).
 4. Izveido direktoriju lejupielādēto teksta datu glabāšanai (`DIRECTORY` norāda saknes direktoriju, kurā tā tiks izveidota):
 
@@ -140,6 +140,8 @@ Sākotnējā iestatīšana:
 * [nivkis_valuation_proc.sql](vzd/nivkis_valuation_proc.sql) - procedūra kumulatīvai datu uzkrāšanai par kadastra objektu novērtējumiem un kadastrālajām vērtībām.
 * [nivkis_ekas_rekviziti.sql](vzd/nivkis_ekas_rekviziti.sql) - materializētais skats ar aktuālajām ēku ģeometrijām un daļu teksta datu, t.sk. adresēm.
 * [nivkis_txt.sh](vzd/nivkis_txt.sh) - bash skripts, kas lejupielādē teksta datus, importē pagaidu PostgreSQL tabulās un izsauc procedūras (aiz `PGPASSWORD` jānorāda lietotāja scheduler parole).
+* [nivkis_building_pre_reg_proc.sql](vzd/nivkis_building_pre_reg_proc.sql) - procedūra pirmsreģistrēto būvju datu atjaunošanai.
+* [pre_reg_buildings.sh](vzd/pre_reg_buildings.sh) - bash skripts, kas lejupielādē datus par pirmsreģistrētajām būvēm un izsauc procedūru [vzd.nivkis_building_pre_reg_proc()](vzd/nivkis_building_pre_reg_proc.sql) (aiz `PGPASSWORD` jānorāda lietotāja scheduler parole).
 
 ### Nekustamā īpašuma tirgus informācijas sistēma (NĪTIS)
 
