@@ -120,7 +120,7 @@ COMMENT ON TABLE vzd.nivkis_servituti IS 'Nekustamā īpašuma valsts kadastra i
 
 COMMENT ON COLUMN vzd.nivkis_servituti.id IS 'ID.';
 
-COMMENT ON COLUMN vzd.nivkis_servituti.code IS 'Kadastra apzīmējums.';
+COMMENT ON COLUMN vzd.nivkis_servituti.code IS 'Servitūta identifikators (apgrūtinājuma kods + numurs pēc kārtas: 7315010100 – ēku servitūta teritorija, 7315020100 – ūdens lietošanas servitūta teritorija, 7315030100 – ceļa servitūta teritorija).';
 
 COMMENT ON COLUMN vzd.nivkis_servituti.parcel_code IS 'Zemes vienības kadastra apzīmējums.';
 
