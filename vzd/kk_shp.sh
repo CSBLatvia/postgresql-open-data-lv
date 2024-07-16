@@ -24,7 +24,6 @@ LAYERS="KKBuilding KKEngineeringStructurePoly KKParcel KKParcelPart KKWayRestric
 
 for type in $LAYERS; do
     APPEND=0
-    rm "kk_shp/$LAYERS*";
     target_file="kk_shp/$type.shp"
     target_layer=$(echo "$type" | tr '[:upper:]' '[:lower:]')
 
