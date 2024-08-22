@@ -1,5 +1,10 @@
 #!/bin/bash
+
+# Pārtrauc izpildi kļūdas gadījumā.
+set -e
+
 cd $HOME/data
+rm -rf aw_csv
 mkdir aw_csv
 cd aw_csv
 wget -q https://data.gov.lv/dati/dataset/0c5e1a3b-0097-45a9-afa9-7f7262f3f623/resource/e7110ebe-1bc0-4c3a-94a3-f20cb723b717/download/aw_ciems.zip

@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Pārtrauc izpildi kļūdas gadījumā.
+set -e
+
 # Par pamatu izmantots https://gist.github.com/laacz/8dfb7b69221790eb8d88e5fb91b9b088.
 # Dzēš esošās un lejupielādē jaunās datnes, atarhivē tās un izdzēš arhīvus.
 cd $HOME/data/nitis
