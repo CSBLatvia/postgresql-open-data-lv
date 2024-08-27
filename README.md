@@ -2,7 +2,7 @@
 
 Repozitorijā apkopoti Centrālajā statistikas pārvaldē veidoti un izmantoti skripti dažādu Latvijas iestāžu publicēto atvērto datu lejupielādei un importēšanai PostgreSQL datubāzē, uzkrājot to vēsturi.
 
-Importēto datu struktūra atšķiras no iestāžu publicētajiem datiem - tā ir vairāk normalizēta, taču ne pilnībā, mēģinot rast balansu starp normalizāciju un lietošanas ērtumu, arīdzan nav iekļautas kolonnas, kas satur datus, ko iespējams atvasināt no citām kolonnām. Atsevišķos gadījumos veidotas arī papildu tabulas un skati ar lietošanai ērtāku datu strutūru.
+Importēto datu struktūra atšķiras no iestāžu publicētajiem datiem - tā ir vairāk normalizēta, taču ne pilnībā, mēģinot rast balansu starp normalizāciju un lietošanas ērtumu, arīdzan nav iekļautas kolonnas, kas satur datus, ko iespējams atvasināt no citām kolonnām. Atsevišķos gadījumos veidotas arī papildu tabulas un skati ar lietošanai ērtāku datu struktūru.
 
 Skripti veidoti izpildīšanai Linux operētājsistēmās, taču ar nelielām izmaiņām tos iespējams lietot arī citās, tai skaitā Windows.
 
