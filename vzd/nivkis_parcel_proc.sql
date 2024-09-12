@@ -393,6 +393,10 @@ IF date_files > date_db THEN
   LEFT OUTER JOIN vzd.nivkis_parcel_survey u ON s."ParcelCadastreNr" = u."ParcelCadastreNr"
     AND s."SurveyKind" = u."SurveyKind"
     AND s."SurveyDate" = u."SurveyDate"
+    AND (
+      u.date_deleted = d."PreparedDate"
+      OR u.date_deleted IS NULL
+      )
   WHERE u."ParcelCadastreNr" IS NULL;
 
   --PlannedParcelList.

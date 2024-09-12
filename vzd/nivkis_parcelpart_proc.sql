@@ -371,6 +371,10 @@ IF date_files > date_db THEN
   LEFT OUTER JOIN vzd.nivkis_parcelpart_survey u ON s."ParcelPartCadastreNr" = u."ParcelPartCadastreNr"
     AND s."SurveyKind" = u."SurveyKind"
     AND s."SurveyDate" = u."SurveyDate"
+    AND (
+      u.date_deleted = d."PreparedDate"
+      OR u.date_deleted IS NULL
+      )
   WHERE u."ParcelPartCadastreNr" IS NULL;
 
   RAISE NOTICE 'Dati nivkis_parcelpart atjaunoti.';

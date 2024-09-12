@@ -666,6 +666,10 @@ IF date_files > date_db THEN
     AND s."AmountKindName" = u."AmountKindName"
     AND COALESCE(s."BuildingAmountQuantity", 0) = COALESCE(u."BuildingAmountQuantity", 0)
     AND COALESCE(s."MeasureKindName", '') = COALESCE(u."MeasureKindName", '')
+    AND (
+      u.date_deleted = d."PreparedDate"
+      OR u.date_deleted IS NULL
+      )
   WHERE u."BuildingCadastreNr" IS NULL;
 
   --ImprovementItemData.
