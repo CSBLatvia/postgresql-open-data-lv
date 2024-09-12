@@ -498,6 +498,10 @@ LEFT OUTER JOIN mvr.mvr_imported u ON s.id::INT = u.objectid
   AND s.forestry_c::SMALLINT = u.forestry_c
   AND s.vmd_headfo = u.vmd_headfo
   AND ST_Equals(ST_Multi(s.geom), u.geom)
+  AND (
+    u.date_deleted = CURRENT_DATE
+    OR u.date_deleted IS NULL
+    )
 WHERE u.id IS NULL
 ORDER BY s.id;
 
