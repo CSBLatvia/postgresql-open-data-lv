@@ -14,7 +14,7 @@ do
   curl "$FILE" -o ${FILE##*/}
 done
 
-unzip -o -q \*.zip
+7za x \*.zip -y -bsp0 -bso0
 rm *.zip
 rm *.xlsx
 

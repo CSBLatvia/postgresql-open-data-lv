@@ -15,7 +15,8 @@ Pievieno rindu: `TZ=Europe/Riga`
 Nepieciešamā programmatūra:
 * PostgreSQL ar paplašinājumiem PostGIS un [PostgreSQL OGR Foreign Data Wrapper](https://github.com/pramsey/pgsql-ogr-fdw),
 * wget,
-* [jq](https://stedolan.github.io/jq/).
+* [jq](https://stedolan.github.io/jq/),
+* p7zip.
 
 Sākotnējā iestatīšana:
 

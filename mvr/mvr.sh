@@ -19,7 +19,7 @@ done
 
 rm *.pdf
 
-7za x \*.7z
+7za x \*.7z -y -bsp0 -bso0
 rm *.7z
 rm *.sbn
 rm *.sbx

@@ -17,7 +17,7 @@ do
   curl "$FILE" -o ${FILE##*/}
 done
 
-unzip -o -q \*.zip
+7za x \*.zip -y -bsp0 -bso0
 rm *.zip
 
 # Apvieno lejupielādētos shapefile (tikai ēkas, inženierbūves, zemes vienības, zemes vienību daļas un apgrūtinājumu ceļa servitūtu teritorijas).

@@ -13,4 +13,6 @@ do
 done
 
 mv *_pirmreg_buves.xlsx pirmreg_buves.xlsx
+rm *.csv
+rm *.json
 psql -U scheduler -d spatial -w -c "CALL vzd.nivkis_building_pre_reg_proc()"
