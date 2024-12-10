@@ -115,18 +115,10 @@ SELECT kods
   ,vkur_tips
   ,nosaukums
   ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_dziv;
 
 ---Ēkas.
@@ -154,20 +146,12 @@ SELECT kods
   ,std
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,TRIM(nosaukums)
+  ,TRIM(sort_nos)
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_eka;
 
 ---Ielas.
@@ -197,18 +181,10 @@ SELECT kods
   ,vkur_tips
   ,nosaukums
   ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_iela;
 
 ---Ciemi.
@@ -238,18 +214,10 @@ SELECT kods
   ,vkur_tips
   ,nosaukums
   ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_ciems;
 
 ---Pilsētas.
@@ -279,18 +247,10 @@ SELECT kods
   ,vkur_tips
   ,nosaukums
   ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_pilseta;
 
 ---Pagasti.
@@ -320,18 +280,10 @@ SELECT kods
   ,vkur_tips
   ,nosaukums
   ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_pagasts;
 
 ---Novadi.
@@ -361,18 +313,10 @@ SELECT kods
   ,vkur_tips
   ,nosaukums
   ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_novads;
 
 ---Rajoni.
@@ -402,18 +346,10 @@ SELECT kods
   ,vkur_tips
   ,nosaukums
   ,sort_nos
-  ,CASE 
-    WHEN atrib LIKE ''
-      THEN NULL
-    ELSE atrib
-    END
+  ,atrib
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_rajons;
 
 ---Rīgas priekšpilsētas.
@@ -627,11 +563,7 @@ SELECT kods
   ,vkur_tips
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_dziv_his
 WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
@@ -656,16 +588,12 @@ SELECT kods
   ,kods_his
   ,tips_cd
   ,std
-  ,nosaukums
+  ,TRIM(nosaukums)
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_eka_his
 WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
@@ -693,11 +621,7 @@ SELECT kods
   ,vkur_tips
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_iela_his
 WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
@@ -719,17 +643,13 @@ INSERT INTO vzd.adreses_his (
   )
 SELECT kods
   ,tips_cd
-  ,std
+  ,TRIM(std)
   ,nosaukums
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_ciems_his
 WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
@@ -757,11 +677,7 @@ SELECT kods
   ,vkur_tips
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_pilseta_his
 WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
@@ -789,11 +705,7 @@ SELECT kods
   ,vkur_tips
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_pagasts_his
 WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
@@ -821,11 +733,7 @@ SELECT kods
   ,vkur_tips
   ,dat_sak::DATE
   ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
-  ,CASE 
-    WHEN dat_beig LIKE ''
-      THEN NULL
-    ELSE dat_beig::DATE
-    END
+  ,dat_beig::DATE
 FROM aw_csv.aw_novads_his
 WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')

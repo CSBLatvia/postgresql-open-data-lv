@@ -83,7 +83,7 @@ CREATE TABLE aw_csv.aw_dziv_his (
   ,dat_mod TEXT NOT NULL
   ,dat_beig TEXT NOT NULL
   ,std TEXT
-  ,nosaukums TEXT NOT NULL
+  ,nosaukums TEXT
   ,vkur_cd INT NOT NULL
   ,vkur_tips SMALLINT NOT NULL
   );
@@ -126,9 +126,9 @@ CREATE TABLE aw_csv.aw_eka_his (
   ,tips_cd SMALLINT NOT NULL
   ,dat_sak TEXT NOT NULL
   ,dat_mod TEXT NOT NULL
-  ,dat_beig TEXT NOT NULL
+  ,dat_beig TEXT
   ,std TEXT
-  ,nosaukums TEXT NOT NULL
+  ,nosaukums TEXT
   ,vkur_cd INT NOT NULL
   ,vkur_tips SMALLINT NOT NULL
   );
