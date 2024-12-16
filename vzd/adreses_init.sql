@@ -148,7 +148,7 @@ CREATE TABLE vzd.adreses_his (
   ,adr_cd_his INT
   ,tips_cd SMALLINT NOT NULL
   ,std TEXT
-  ,nosaukums TEXT NOT NULL
+  ,nosaukums TEXT
   ,vkur_cd INT NOT NULL
   ,vkur_tips SMALLINT NOT NULL
   ,dat_sak DATE NOT NULL
