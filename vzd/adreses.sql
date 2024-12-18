@@ -48,7 +48,7 @@ CREATE TABLE vzd.adreses (
   ,sort_nos TEXT NOT NULL
   ,atrib TEXT
   ,dat_sak DATE NOT NULL
-  ,dat_mod TIMESTAMP NOT NULL
+  ,dat_mod DATE NOT NULL
   ,dat_beig DATE
   );
 
@@ -84,7 +84,7 @@ COMMENT ON COLUMN vzd.adreses.atrib IS 'Rajoniem, novadiem, pagastiem un pilsēt
 
 COMMENT ON COLUMN vzd.adreses.dat_sak IS 'Adresācijas objekta izveidošanas vai pirmreizējās reģistrācijas datums, ja nav zināms precīzs adresācijas objekta izveides datums.';
 
-COMMENT ON COLUMN vzd.adreses.dat_mod IS 'Datums un laiks, kad pēdējo reizi informācijas sistēmā tehniski modificēts ieraksts/dati par adresācijas objektu (piemēram, aktualizēts statuss, apstiprinājuma pakāpe, pievienots atribūts u.c.) vai mainīts pilnais adreses pieraksts.';
+COMMENT ON COLUMN vzd.adreses.dat_mod IS 'Datums, kad pēdējo reizi informācijas sistēmā tehniski modificēts ieraksts/dati par adresācijas objektu (piemēram, aktualizēts statuss, apstiprinājuma pakāpe, pievienots atribūts u.c.) vai mainīts pilnais adreses pieraksts.';
 
 COMMENT ON COLUMN vzd.adreses.dat_beig IS 'Adresācijas objekta likvidācijas datums, ja adresācijas objekts beidza pastāvēt.';
 
@@ -117,7 +117,7 @@ SELECT kods
   ,sort_nos
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_dziv;
 
@@ -150,7 +150,7 @@ SELECT kods
   ,TRIM(sort_nos)
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_eka;
 
@@ -183,7 +183,7 @@ SELECT kods
   ,sort_nos
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_iela;
 
@@ -216,7 +216,7 @@ SELECT kods
   ,sort_nos
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_ciems;
 
@@ -249,7 +249,7 @@ SELECT kods
   ,sort_nos
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_pilseta;
 
@@ -282,7 +282,7 @@ SELECT kods
   ,sort_nos
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_pagasts;
 
@@ -315,7 +315,7 @@ SELECT kods
   ,sort_nos
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_novads;
 
@@ -348,7 +348,7 @@ SELECT kods
   ,sort_nos
   ,atrib
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_rajons;
 
@@ -562,10 +562,10 @@ SELECT kods
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_dziv_his
-WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
+WHERE dat_mod::DATE > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
     FROM vzd.adreses_his
     WHERE tips_cd = 109
@@ -592,10 +592,10 @@ SELECT kods
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_eka_his
-WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
+WHERE dat_mod::DATE > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
     FROM vzd.adreses_his
     WHERE tips_cd = 108
@@ -620,10 +620,10 @@ SELECT kods
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_iela_his
-WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
+WHERE dat_mod::DATE > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
     FROM vzd.adreses_his
     WHERE tips_cd = 107
@@ -648,10 +648,10 @@ SELECT kods
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_ciems_his
-WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
+WHERE dat_mod::DATE > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
     FROM vzd.adreses_his
     WHERE tips_cd = 106
@@ -676,10 +676,10 @@ SELECT kods
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_pilseta_his
-WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
+WHERE dat_mod::DATE > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
     FROM vzd.adreses_his
     WHERE tips_cd = 104
@@ -704,10 +704,10 @@ SELECT kods
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_pagasts_his
-WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
+WHERE dat_mod::DATE > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
     FROM vzd.adreses_his
     WHERE tips_cd = 105
@@ -732,10 +732,10 @@ SELECT kods
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
-  ,to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP
+  ,dat_mod::DATE
   ,dat_beig::DATE
 FROM aw_csv.aw_novads_his
-WHERE to_timestamp(dat_mod, 'dd.mm.yyyy HH24:MI:SS')::TIMESTAMP > (
+WHERE dat_mod::DATE > (
     SELECT COALESCE(MAX(dat_mod), '1900-01-01')
     FROM vzd.adreses_his
     WHERE tips_cd = 113
