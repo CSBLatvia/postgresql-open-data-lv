@@ -110,11 +110,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -143,11 +143,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,TRIM(nosaukums)
-  ,TRIM(sort_nos)
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -176,11 +176,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -209,11 +209,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -242,11 +242,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -275,11 +275,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -308,11 +308,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -341,11 +341,11 @@ SELECT kods
   ,statuss
   ,apstipr
   ,apst_pak
-  ,nosaukums
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
-  ,nosaukums
-  ,sort_nos
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(sort_nos, '\s+', ' ', 'g'))
   ,atrib
   ,dat_sak::DATE
   ,dat_mod::DATE
@@ -374,7 +374,7 @@ INSERT INTO vzd.adreses_pp (
   ,ppils
   )
 SELECT kods
-  ,ppils
+  ,TRIM(regexp_replace(ppils, '\s+', ' ', 'g'))
 FROM aw_csv.aw_ppils;
 
 ---Papildus dati par ēkām.
@@ -540,6 +540,8 @@ COMMENT ON COLUMN vzd.adreses_ekas_sadalitas.std IS 'Adresācijas objekta pilnai
 
 COMMENT ON COLUMN vzd.adreses_ekas_sadalitas.geom IS 'Ģeometrija.';
 
+CREATE UNIQUE INDEX ON vzd.adreses_ekas_sadalitas (adr_cd);
+
 CREATE INDEX adreses_ekas_sadalitas_geom_idx ON vzd.adreses_ekas_sadalitas USING GIST (geom);
 
 --Adrešu vēsturiskie pieraksti.
@@ -557,7 +559,7 @@ INSERT INTO vzd.adreses_his (
   )
 SELECT kods
   ,tips_cd
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,nosaukums
   ,vkur_cd
   ,vkur_tips
@@ -587,8 +589,8 @@ INSERT INTO vzd.adreses_his (
 SELECT kods
   ,kods_his
   ,tips_cd
-  ,std
-  ,TRIM(nosaukums)
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
+  ,TRIM(regexp_replace(nosaukums, '\s+', ' ', 'g'))
   ,vkur_cd
   ,vkur_tips
   ,dat_sak::DATE
@@ -615,7 +617,7 @@ INSERT INTO vzd.adreses_his (
   )
 SELECT kods
   ,tips_cd
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,nosaukums
   ,vkur_cd
   ,vkur_tips
@@ -643,7 +645,7 @@ INSERT INTO vzd.adreses_his (
   )
 SELECT kods
   ,tips_cd
-  ,TRIM(std)
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,nosaukums
   ,vkur_cd
   ,vkur_tips
@@ -671,7 +673,7 @@ INSERT INTO vzd.adreses_his (
   )
 SELECT kods
   ,tips_cd
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,nosaukums
   ,vkur_cd
   ,vkur_tips
@@ -699,7 +701,7 @@ INSERT INTO vzd.adreses_his (
   )
 SELECT kods
   ,tips_cd
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,nosaukums
   ,vkur_cd
   ,vkur_tips
@@ -727,7 +729,7 @@ INSERT INTO vzd.adreses_his (
   )
 SELECT kods
   ,tips_cd
-  ,std
+  ,TRIM(regexp_replace(std, '\s+', ' ', 'g'))
   ,nosaukums
   ,vkur_cd
   ,vkur_tips
