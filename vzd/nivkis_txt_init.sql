@@ -630,7 +630,7 @@ CREATE TABLE vzd.nivkis_building (
   ,"BuildingPregCount" SMALLINT
   ,"BuildingAcceptionYears" SMALLINT[]
   ,"BuildingExploitYear" SMALLINT
-  ,"BuildingDeprecation" SMALLINT
+  ,"BuildingDeprecation" TEXT
   ,"BuildingDepValDate" DATE
   ,"BuildingSurveyDate" DATE
   ,"NotForLandBook" BOOLEAN
@@ -679,7 +679,7 @@ COMMENT ON COLUMN vzd.nivkis_building."BuildingAcceptionYears" IS 'Ekspluatācij
 
 COMMENT ON COLUMN vzd.nivkis_building."BuildingExploitYear" IS 'Ekspluatācijas uzsākšanas gads.';
 
-COMMENT ON COLUMN vzd.nivkis_building."BuildingDeprecation" IS 'Nolietojums, %.';
+COMMENT ON COLUMN vzd.nivkis_building."BuildingDeprecation" IS 'Nolietojums, % vai grupa (V1 – ļoti labā tehniskā stāvoklī, V2 – labā tehniskā stāvoklī, V3 – apmierinošā tehniskā stāvoklī, V4 – neapmierinošā tehniskā stāvoklī, V5 – kritiskā stāvoklī vai sabrukusi).';
 
 COMMENT ON COLUMN vzd.nivkis_building."BuildingDepValDate" IS 'Nolietojuma aprēķina datums.';
 

@@ -68,7 +68,7 @@ IF date_files > date_db THEN
     ,(XPATH('/BuildingItemData/BuildingBasicData/BuildingPregCount/text()', "BuildingItemData")) [1]::TEXT::SMALLINT "BuildingPregCount"
     ,(XPATH('/BuildingItemData/BuildingBasicData/BuildingAcceptionYears/text()', "BuildingItemData")) [1]::TEXT "BuildingAcceptionYears"
     ,(XPATH('/BuildingItemData/BuildingBasicData/BuildingExploitYear/text()', "BuildingItemData")) [1]::TEXT::SMALLINT "BuildingExploitYear"
-    ,(XPATH('/BuildingItemData/BuildingBasicData/BuildingDeprecation/text()', "BuildingItemData")) [1]::TEXT::SMALLINT "BuildingDeprecation"
+    ,(XPATH('/BuildingItemData/BuildingBasicData/BuildingDeprecation/text()', "BuildingItemData")) [1]::TEXT "BuildingDeprecation"
     ,(XPATH('/BuildingItemData/BuildingBasicData/BuildingDepValDate/text()', "BuildingItemData")) [1]::TEXT::DATE "BuildingDepValDate"
     ,(XPATH('/BuildingItemData/BuildingBasicData/BuildingSurveyDate/text()', "BuildingItemData")) [1]::TEXT::DATE "BuildingSurveyDate"
     ,(XPATH('/BuildingItemData/BuildingBasicData/NotForLandBook/text()', "BuildingItemData")) [1]::TEXT "NotForLandBook"
@@ -242,7 +242,7 @@ IF date_files > date_db THEN
       OR COALESCE(nivkis_building."BuildingPregCount", 0) != COALESCE(s."BuildingPregCount", 0)
       OR COALESCE(nivkis_building."BuildingAcceptionYears", '{0}') != COALESCE(s."BuildingAcceptionYears", '{0}')
       OR COALESCE(nivkis_building."BuildingExploitYear", 0) != COALESCE(s."BuildingExploitYear", 0)
-      OR COALESCE(nivkis_building."BuildingDeprecation", 0) != COALESCE(s."BuildingDeprecation", 0)
+      OR COALESCE(nivkis_building."BuildingDeprecation", '') != COALESCE(s."BuildingDeprecation", '')
       OR COALESCE(nivkis_building."BuildingDepValDate", '1900-01-01') != COALESCE(s."BuildingDepValDate", '1900-01-01')
       OR COALESCE(nivkis_building."BuildingSurveyDate", '1900-01-01') != COALESCE(s."BuildingSurveyDate", '1900-01-01')
       OR COALESCE(nivkis_building."NotForLandBook", FALSE) != COALESCE(s."NotForLandBook", FALSE)
@@ -338,7 +338,7 @@ IF date_files > date_db THEN
       OR COALESCE(u."BuildingPregCount", 0) != COALESCE(s."BuildingPregCount", 0)
       OR COALESCE(u."BuildingAcceptionYears", '{0}') != COALESCE(s."BuildingAcceptionYears", '{0}')
       OR COALESCE(u."BuildingExploitYear", 0) != COALESCE(s."BuildingExploitYear", 0)
-      OR COALESCE(u."BuildingDeprecation", 0) != COALESCE(s."BuildingDeprecation", 0)
+      OR COALESCE(u."BuildingDeprecation", '') != COALESCE(s."BuildingDeprecation", '')
       OR COALESCE(u."BuildingDepValDate", '1900-01-01') != COALESCE(s."BuildingDepValDate", '1900-01-01')
       OR COALESCE(u."BuildingSurveyDate", '1900-01-01') != COALESCE(s."BuildingSurveyDate", '1900-01-01')
       OR COALESCE(u."NotForLandBook", FALSE) != COALESCE(s."NotForLandBook", FALSE)
