@@ -289,7 +289,7 @@ DROP TABLE IF EXISTS vzd.nivkis_parcel_landpurpose;
 CREATE TABLE vzd.nivkis_parcel_landpurpose (
   id SERIAL PRIMARY KEY
   ,"ParcelCadastreNr" VARCHAR(11) NOT NULL
-  ,"LandPurposeKindId" SMALLINT NOT NULL
+  ,"LandPurposeKindId" TEXT NOT NULL
   ,"Areable" INT
   ,"Orchards" INT
   ,"Meadows" INT
@@ -357,7 +357,7 @@ GRANT SELECT, UPDATE
 DROP TABLE IF EXISTS vzd.nivkis_parcel_landpurpose_kind;
 
 CREATE TABLE vzd.nivkis_parcel_landpurpose_kind (
-  "LandPurposeKindId" SMALLINT NOT NULL PRIMARY KEY
+  "LandPurposeKindId" TEXT NOT NULL PRIMARY KEY
   ,"LandPurposeKindName" TEXT NOT NULL
   );
 
@@ -511,7 +511,7 @@ DROP TABLE IF EXISTS vzd.nivkis_parcelpart_landpurpose;
 CREATE TABLE vzd.nivkis_parcelpart_landpurpose (
   id SERIAL PRIMARY KEY
   ,"ParcelPartCadastreNr" VARCHAR(15) NOT NULL
-  ,"LandPurposeKindId" SMALLINT NOT NULL
+  ,"LandPurposeKindId" TEXT NOT NULL
   ,"Areable" INT
   ,"Orchards" INT
   ,"Meadows" INT

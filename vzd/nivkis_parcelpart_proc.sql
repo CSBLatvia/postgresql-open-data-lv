@@ -139,7 +139,7 @@ IF date_files > date_db THEN
     FROM a
     )
   SELECT "ParcelPartCadastreNr"
-    ,(XPATH('/LandPurposeData/LandPurposeKind/LandPurposeKindId/text()', "LandPurposeData")) [1]::TEXT::SMALLINT "LandPurposeKindId"
+    ,(XPATH('/LandPurposeData/LandPurposeKind/LandPurposeKindId/text()', "LandPurposeData")) [1]::TEXT "LandPurposeKindId"
     ,(XPATH('/LandPurposeData/LandPurposeKind/LandPurposeKindName/text()', "LandPurposeData")) [1]::TEXT "LandPurposeKindName"
     --,(XPATH('/LandPurposeData/LandPurposeArea/text()', "LandPurposeData")) [1]::TEXT::INT "LandPurposeArea"
     --,(XPATH('/LandPurposeData/LandPurposeExplicationData/AgricultTotal/text()', "LandPurposeData")) [1]::TEXT::INT "AgricultTotal"
