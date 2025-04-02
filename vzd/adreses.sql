@@ -431,12 +431,14 @@ SELECT a.adr_cd
   ,COALESCE(ciems.nosaukums, ciems_no_ielas.nosaukums) ciems
   ,COALESCE(pilseta.nosaukums, pilseta_no_ielas.nosaukums) pilseta
   ,COALESCE(pagasts.nosaukums, pagasts_no_ciema.nosaukums, pagasts_no_ciema_no_ielas.nosaukums) pagasts
-  ,COALESCE(novads_no_pagasta.nosaukums, novads_no_pagasta_no_ciema.nosaukums, novads_no_pagasta_no_ciema_no_ielas.nosaukums, novads_no_pilsetas.nosaukums, novads_no_pilsetas_no_ielas.nosaukums) novads
+  ,COALESCE(novads.nosaukums, novads_no_pagasta.nosaukums, novads_no_pagasta_no_ciema.nosaukums, novads_no_ciema.nosaukums, novads_no_pagasta_no_ciema_no_ielas.nosaukums, novads_no_pilsetas.nosaukums, novads_no_pilsetas_no_ielas.nosaukums) novads
+  ,COALESCE(rajons_no_pagasta.nosaukums, rajons_no_pagasta_no_ciema.nosaukums, rajons_no_pagasta_no_ciema_no_ielas.nosaukums, rajons_no_pilsetas.nosaukums, rajons_no_pilsetas_no_ielas.nosaukums) rajons
   ,a.atrib
   ,a.std
-  ,b.geom
+  ,COALESCE(b.geom, c.geom) geom
 FROM vzd.adreses a
 LEFT JOIN vzd.adreses_ekas b ON a.adr_cd = b.adr_cd
+LEFT JOIN vzd.adreses_ekas_koord_del c ON a.adr_cd = c.adr_cd
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
@@ -466,54 +468,96 @@ LEFT JOIN (
   FROM vzd.adreses
   WHERE tips_cd = 104
   ) pilseta_no_ielas ON pilseta_no_ielas.adr_cd = iela.vkur_cd
----House is directly in a parish.
+---House is directly in a rural territory.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 105
   ) pagasts ON pagasts.adr_cd = a.vkur_cd
----House is directly in a village in a parish.
+---House is directly in a village in a rural territory.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 105
   ) pagasts_no_ciema ON pagasts_no_ciema.adr_cd = ciems.vkur_cd
----House is on a street in a village in a parish.
+---House is on a street in a village in a rural territory.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 105
   ) pagasts_no_ciema_no_ielas ON pagasts_no_ciema_no_ielas.adr_cd = ciems_no_ielas.vkur_cd
----House in in a parish in a county.
+---House is directly in a municipality. Deleted (historical) data only.
+LEFT JOIN (
+  SELECT *
+  FROM vzd.adreses
+  WHERE tips_cd = 113
+  ) novads ON novads.adr_cd = a.vkur_cd
+---House in in a rural territory in a municipality.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 113
   ) novads_no_pagasta ON novads_no_pagasta.adr_cd = pagasts.vkur_cd
----House is in a village in a parish in a county.
+---House is in a village in a rural territory in a municipality.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 113
   ) novads_no_pagasta_no_ciema ON novads_no_pagasta_no_ciema.adr_cd = pagasts_no_ciema.vkur_cd
----House is on a street in a village in a parish in a county.
+---House is in a village in a municipality. Deleted (historical) data only.
+LEFT JOIN (
+  SELECT *
+  FROM vzd.adreses
+  WHERE tips_cd = 113
+  ) novads_no_ciema ON novads_no_ciema.adr_cd = ciems.vkur_cd
+---House is on a street in a village in a rural territory in a municipality.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 113
   ) novads_no_pagasta_no_ciema_no_ielas ON novads_no_pagasta_no_ciema_no_ielas.adr_cd = pagasts_no_ciema_no_ielas.vkur_cd
----House is directly in a town in a county.
+---House is directly in a town in a municipality.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 113
   ) novads_no_pilsetas ON novads_no_pilsetas.adr_cd = pilseta.vkur_cd
----House is on a street in a town in a county.
+---House is on a street in a town in a municipality.
 LEFT JOIN (
   SELECT *
   FROM vzd.adreses
   WHERE tips_cd = 113
   ) novads_no_pilsetas_no_ielas ON novads_no_pilsetas_no_ielas.adr_cd = pilseta_no_ielas.vkur_cd
+---House in in a rural territory in a district. Deleted (historical) data only.
+LEFT JOIN (
+  SELECT *
+  FROM vzd.adreses
+  WHERE tips_cd = 102
+  ) rajons_no_pagasta ON rajons_no_pagasta.adr_cd = pagasts.vkur_cd
+---House is in a village in a rural territory in a district. Deleted (historical) data only.
+LEFT JOIN (
+  SELECT *
+  FROM vzd.adreses
+  WHERE tips_cd = 102
+  ) rajons_no_pagasta_no_ciema ON rajons_no_pagasta_no_ciema.adr_cd = pagasts_no_ciema.vkur_cd
+---House is on a street in a village in a rural territory in a district. Deleted (historical) data only.
+LEFT JOIN (
+  SELECT *
+  FROM vzd.adreses
+  WHERE tips_cd = 102
+  ) rajons_no_pagasta_no_ciema_no_ielas ON rajons_no_pagasta_no_ciema_no_ielas.adr_cd = pagasts_no_ciema_no_ielas.vkur_cd
+---House is directly in a town in a district. Deleted (historical) data only.
+LEFT JOIN (
+  SELECT *
+  FROM vzd.adreses
+  WHERE tips_cd = 102
+  ) rajons_no_pilsetas ON rajons_no_pilsetas.adr_cd = pilseta.vkur_cd
+---House is on a street in a town in a district. Deleted (historical) data only.
+LEFT JOIN (
+  SELECT *
+  FROM vzd.adreses
+  WHERE tips_cd = 102
+  ) rajons_no_pilsetas_no_ielas ON rajons_no_pilsetas_no_ielas.adr_cd = pilseta_no_ielas.vkur_cd
 WHERE a.tips_cd = 108;
 
 COMMENT ON MATERIALIZED VIEW vzd.adreses_ekas_sadalitas IS 'Ēku un apbūvei paredzēto zemes vienību adresācijas objekti ar aktuālo adreses pierakstu, kas sadalīts pa laukiem.';
@@ -533,6 +577,8 @@ COMMENT ON COLUMN vzd.adreses_ekas_sadalitas.pilseta IS 'Pilsētas nosaukums.';
 COMMENT ON COLUMN vzd.adreses_ekas_sadalitas.pagasts IS 'Pagasta nosaukums.';
 
 COMMENT ON COLUMN vzd.adreses_ekas_sadalitas.novads IS 'Novada nosaukums.';
+
+COMMENT ON COLUMN vzd.adreses_ekas_sadalitas.rajons IS 'Rajona nosaukums.';
 
 COMMENT ON COLUMN vzd.adreses_ekas_sadalitas.atrib IS 'Pasta indekss.';
 
