@@ -62,4 +62,5 @@ psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_vietu_centroidi (kods, tips_
 cd ..
 rm -r aw_csv
 psql -U scheduler -d spatial -w -c "CALL vzd.adreses()"
+psql -U scheduler -d spatial -w -c "CALL vzd.nivkis_ekas_rekviziti_proc()"
 psql -U scheduler -d spatial -w -c "CALL vzd.adreses_his_ekas_split()"

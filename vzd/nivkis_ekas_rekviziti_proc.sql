@@ -1,4 +1,9 @@
---Aktuālās ēku ģeometrijas un daļa teksta datu, t.sk. adrese.
+CREATE OR REPLACE PROCEDURE vzd.nivkis_ekas_rekviziti_proc(
+	)
+LANGUAGE 'plpgsql'
+
+AS $BODY$BEGIN
+
 DROP MATERIALIZED VIEW IF EXISTS vzd.nivkis_ekas_rekviziti;
 
 CREATE MATERIALIZED VIEW vzd.nivkis_ekas_rekviziti
@@ -139,5 +144,7 @@ WITH NO DATA;
 
 CREATE INDEX nivkis_ekas_rekviziti_geom_idx ON vzd.nivkis_ekas_rekviziti USING GIST (geom);
 
---Ar superlietotāja tiesībām.
-ALTER MATERIALIZED VIEW vzd.nivkis_ekas_rekviziti OWNER TO scheduler;
+END;
+$BODY$;
+
+GRANT EXECUTE ON PROCEDURE vzd.nivkis_ekas_rekviziti_proc() TO scheduler;

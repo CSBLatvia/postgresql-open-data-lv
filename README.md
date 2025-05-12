@@ -142,7 +142,7 @@ Sākotnējā iestatīšana:
 * [nivkis_valuation_proc.sql](vzd/nivkis_valuation_proc.sql) - procedūra kumulatīvai datu uzkrāšanai par kadastra objektu novērtējumiem un kadastrālajām vērtībām.
 * [nivkis_building_pre_reg_proc.sql](vzd/nivkis_building_pre_reg_proc.sql) - procedūra pirmsreģistrēto būvju datu atjaunošanai.
 * [pre_reg_buildings.sh](vzd/pre_reg_buildings.sh) - bash skripts, kas lejupielādē datus par pirmsreģistrētajām būvēm un izsauc procedūru [vzd.nivkis_building_pre_reg_proc()](vzd/nivkis_building_pre_reg_proc.sql) (aiz `PGPASSWORD` jānorāda lietotāja scheduler parole).
-* [nivkis_ekas_rekviziti.sql](vzd/nivkis_ekas_rekviziti.sql) - materializētais skats ar aktuālajām ēku ģeometrijām un daļu teksta datu, t.sk. adresēm.
+* [nivkis_ekas_rekviziti_proc.sql](vzd/nivkis_ekas_rekviziti_proc.sql) - procedūra, kas izveido materializēto skatu ar aktuālajām ēku ģeometrijām un daļu teksta datu, t.sk. adresēm.
 * [nivkis_txt.sh](vzd/nivkis_txt.sh) - bash skripts, kas lejupielādē teksta datus, importē pagaidu PostgreSQL tabulās un izsauc procedūras (aiz `PGPASSWORD` jānorāda lietotāja scheduler parole).
 
 ### Nekustamā īpašuma tirgus informācijas sistēma (NĪTIS)
