@@ -28,7 +28,7 @@ WHERE nivkis_buves.code = s.code
   AND (
     nivkis_buves.parcel_code != s.parcelcode
     OR nivkis_buves.object_code != s.objectcode::BIGINT
-    OR ST_Equals(nivkis_buves.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(nivkis_buves.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     );
 
 INSERT INTO vzd.nivkis_buves (
@@ -41,7 +41,7 @@ INSERT INTO vzd.nivkis_buves (
 SELECT s.code
   ,s.objectcode::BIGINT
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
 INNER JOIN kk_shp.kkbuilding s ON u.code = s.code
@@ -49,7 +49,7 @@ WHERE u.object_code < 6000000000
   AND (
     u.parcel_code != s.parcelcode
     OR u.object_code != s.objectcode::BIGINT
-    OR ST_Equals(u.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     )
   AND u.date_deleted = CURRENT_DATE - 1
   AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
@@ -65,7 +65,7 @@ INSERT INTO vzd.nivkis_buves (
 SELECT s.code
   ,s.objectcode::BIGINT
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
 RIGHT OUTER JOIN kk_shp.kkbuilding s ON u.code = s.code
@@ -93,7 +93,7 @@ WHERE nivkis_buves.code = s.code
   AND (
     nivkis_buves.parcel_code != s.parcelcode
     OR nivkis_buves.object_code != s.objectcode::BIGINT
-    OR ST_Equals(nivkis_buves.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(nivkis_buves.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     );
 
 INSERT INTO vzd.nivkis_buves (
@@ -106,7 +106,7 @@ INSERT INTO vzd.nivkis_buves (
 SELECT s.code
   ,s.objectcode::BIGINT
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
 INNER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
@@ -114,7 +114,7 @@ WHERE u.object_code >= 6000000000
   AND (
     u.parcel_code != s.parcelcode
     OR u.object_code != s.objectcode::BIGINT
-    OR ST_Equals(u.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     )
   AND u.date_deleted = CURRENT_DATE - 1
   AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
@@ -130,7 +130,7 @@ INSERT INTO vzd.nivkis_buves (
 SELECT s.code
   ,s.objectcode::BIGINT
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
 RIGHT OUTER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
@@ -156,7 +156,7 @@ WHERE nivkis_zemes_vienibas.code = s.code
   AND (
     nivkis_zemes_vienibas.geom_actual_date != s.geom_act_d
     OR nivkis_zemes_vienibas.object_code != s.objectcode::BIGINT
-    OR ST_Equals(nivkis_zemes_vienibas.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(nivkis_zemes_vienibas.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     );
 
 INSERT INTO vzd.nivkis_zemes_vienibas (
@@ -169,14 +169,14 @@ INSERT INTO vzd.nivkis_zemes_vienibas (
 SELECT s.code
   ,s.geom_act_d
   ,s.objectcode::BIGINT
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibas u
 INNER JOIN kk_shp.kkparcel s ON u.code = s.code
 WHERE (
     u.geom_actual_date != s.geom_act_d
     OR u.object_code != s.objectcode::BIGINT
-    OR ST_Equals(u.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     )
   AND u.date_deleted = CURRENT_DATE - 1
   AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
@@ -192,7 +192,7 @@ INSERT INTO vzd.nivkis_zemes_vienibas (
 SELECT s.code
   ,s.geom_act_d
   ,s.objectcode::BIGINT
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibas u
 RIGHT OUTER JOIN kk_shp.kkparcel s ON u.code = s.code
@@ -217,7 +217,7 @@ WHERE nivkis_zemes_vienibu_dalas.code = s.code
   AND nivkis_zemes_vienibu_dalas.date_deleted IS NULL
   AND (
     nivkis_zemes_vienibu_dalas.parcel_code != s.parcelcode
-    OR ST_Equals(nivkis_zemes_vienibu_dalas.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(nivkis_zemes_vienibu_dalas.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     );
 
 INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
@@ -228,13 +228,13 @@ INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibu_dalas u
 INNER JOIN kk_shp.kkparcelpart s ON u.code = s.code
 WHERE (
     u.parcel_code != s.parcelcode
-    OR ST_Equals(u.geom, ST_MakeValid(s.geom)) = FALSE
+    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
     )
   AND u.date_deleted = CURRENT_DATE - 1
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
@@ -248,7 +248,7 @@ INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibu_dalas u
 RIGHT OUTER JOIN kk_shp.kkparcelpart s ON u.code = s.code
@@ -274,7 +274,7 @@ FROM kk_shp.kkwayrestriction s
 WHERE nivkis_servituti.code = s.code
   AND nivkis_servituti.parcel_code = s.parcelcode
   AND nivkis_servituti.date_deleted IS NULL
-  AND ST_Equals(nivkis_servituti.geom, ST_MakeValid(s.geom)) = FALSE;
+  AND ST_Equals(nivkis_servituti.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE;
 
 INSERT INTO vzd.nivkis_servituti (
   code
@@ -284,12 +284,12 @@ INSERT INTO vzd.nivkis_servituti (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
 INNER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
-WHERE ST_Equals(u.geom, ST_MakeValid(s.geom)) = FALSE
+WHERE ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
   AND u.date_deleted = CURRENT_DATE - 1
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
@@ -302,7 +302,7 @@ INSERT INTO vzd.nivkis_servituti (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_MakeValid(s.geom)
+  ,ST_Multi(ST_MakeValid(s.geom))
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
 RIGHT OUTER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
