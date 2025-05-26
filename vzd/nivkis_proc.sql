@@ -72,6 +72,32 @@ RIGHT OUTER JOIN kk_shp.kkbuilding s ON u.code = s.code
 WHERE u.code IS NULL
   AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
+---Agrāk dzēstas.
+DROP TABLE IF EXISTS tmp;
+
+CREATE TEMPORARY TABLE tmp AS
+SELECT DISTINCT u.code
+FROM vzd.nivkis_buves u
+LEFT OUTER JOIN vzd.nivkis_buves b ON u.code = b.code
+  AND b.date_deleted IS NULL
+WHERE b.code IS NULL;
+
+INSERT INTO vzd.nivkis_buves (
+  code
+  ,object_code
+  ,parcel_code
+  ,geom
+  ,date_created
+  )
+SELECT s.code
+  ,s.objectcode::BIGINT
+  ,s.parcelcode
+  ,ST_Multi(ST_MakeValid(s.geom))
+  ,CURRENT_DATE - 1
+FROM tmp u
+INNER JOIN kk_shp.kkbuilding s ON u.code = s.code
+WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+
 --Inženierbūves.
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_buves
@@ -137,6 +163,23 @@ RIGHT OUTER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
 WHERE u.code IS NULL
   AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
+---Agrāk dzēstas.
+INSERT INTO vzd.nivkis_buves (
+  code
+  ,object_code
+  ,parcel_code
+  ,geom
+  ,date_created
+  )
+SELECT s.code
+  ,s.objectcode::BIGINT
+  ,s.parcelcode
+  ,ST_Multi(ST_MakeValid(s.geom))
+  ,CURRENT_DATE - 1
+FROM tmp u
+INNER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
+WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+
 --Zemes vienības.
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_zemes_vienibas uorig
@@ -199,6 +242,32 @@ RIGHT OUTER JOIN kk_shp.kkparcel s ON u.code = s.code
 WHERE u.code IS NULL
   AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
+---Agrāk dzēstas.
+DROP TABLE IF EXISTS tmp;
+
+CREATE TEMPORARY TABLE tmp AS
+SELECT DISTINCT u.code
+FROM vzd.nivkis_zemes_vienibas u
+LEFT OUTER JOIN vzd.nivkis_zemes_vienibas b ON u.code = b.code
+  AND b.date_deleted IS NULL
+WHERE b.code IS NULL;
+
+INSERT INTO vzd.nivkis_zemes_vienibas (
+  code
+  ,geom_actual_date
+  ,object_code
+  ,geom
+  ,date_created
+  )
+SELECT s.code
+  ,s.geom_act_d
+  ,s.objectcode::BIGINT
+  ,ST_Multi(ST_MakeValid(s.geom))
+  ,CURRENT_DATE - 1
+FROM tmp u
+INNER JOIN kk_shp.kkparcel s ON u.code = s.code
+WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+
 --Zemes vienību daļas.
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_zemes_vienibu_dalas uorig
@@ -255,6 +324,30 @@ RIGHT OUTER JOIN kk_shp.kkparcelpart s ON u.code = s.code
 WHERE u.code IS NULL
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
+---Agrāk dzēstas.
+DROP TABLE IF EXISTS tmp;
+
+CREATE TEMPORARY TABLE tmp AS
+SELECT DISTINCT u.code
+FROM vzd.nivkis_zemes_vienibu_dalas u
+LEFT OUTER JOIN vzd.nivkis_zemes_vienibu_dalas b ON u.code = b.code
+  AND b.date_deleted IS NULL
+WHERE b.code IS NULL;
+
+INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
+  code
+  ,parcel_code
+  ,geom
+  ,date_created
+  )
+SELECT s.code
+  ,s.parcelcode
+  ,ST_Multi(ST_MakeValid(s.geom))
+  ,CURRENT_DATE - 1
+FROM tmp u
+INNER JOIN kk_shp.kkparcelpart s ON u.code = s.code
+WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+
 --Apgrūtinājumu ceļa servitūtu teritorijas.
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_servituti uorig
@@ -309,6 +402,33 @@ RIGHT OUTER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE u.code IS NULL
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+
+---Agrāk dzēstas.
+DROP TABLE IF EXISTS tmp;
+
+CREATE TEMPORARY TABLE tmp AS
+SELECT DISTINCT u.code
+  ,u.parcel_code
+FROM vzd.nivkis_servituti u
+LEFT OUTER JOIN vzd.nivkis_servituti b ON u.code = b.code
+  AND u.parcel_code = b.parcel_code
+  AND b.date_deleted IS NULL
+WHERE b.code IS NULL;
+
+INSERT INTO vzd.nivkis_servituti (
+  code
+  ,parcel_code
+  ,geom
+  ,date_created
+  )
+SELECT s.code
+  ,s.parcelcode
+  ,ST_Multi(ST_MakeValid(s.geom))
+  ,CURRENT_DATE - 1
+FROM tmp u
+INNER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
+  AND u.parcel_code = s.parcelcode
+WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 END
 $$ LANGUAGE plpgsql;
