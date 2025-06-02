@@ -96,7 +96,7 @@ SELECT s.code
   ,CURRENT_DATE - 1
 FROM tmp u
 INNER JOIN kk_shp.kkbuilding s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 --Inženierbūves.
 ---Vairāk neeksistē.
@@ -178,7 +178,7 @@ SELECT s.code
   ,CURRENT_DATE - 1
 FROM tmp u
 INNER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 --Zemes vienības.
 ---Vairāk neeksistē.
@@ -266,7 +266,7 @@ SELECT s.code
   ,CURRENT_DATE - 1
 FROM tmp u
 INNER JOIN kk_shp.kkparcel s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 --Zemes vienību daļas.
 ---Vairāk neeksistē.
@@ -346,7 +346,7 @@ SELECT s.code
   ,CURRENT_DATE - 1
 FROM tmp u
 INNER JOIN kk_shp.kkparcelpart s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 --Apgrūtinājumu ceļa servitūtu teritorijas.
 ---Vairāk neeksistē.
@@ -428,7 +428,7 @@ SELECT s.code
 FROM tmp u
 INNER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
-WHERE COALESCE(s.geom::TEXT, '') != '' --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 END
 $$ LANGUAGE plpgsql;
