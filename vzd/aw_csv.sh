@@ -54,7 +54,7 @@ psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_pilseta (kods, tips_cd, nosa
 psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_pilseta_his RESTART IDENTITY;"
 psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_pilseta_his (kods, tips_cd, dat_sak, dat_mod, dat_beig, std, nosaukums, vkur_cd, vkur_tips) FROM aw_pilseta_his.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
 psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_ppils RESTART IDENTITY;"
-psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_ppils (kods, ppils) FROM aw_ppils.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
+psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_ppils (kods, ppils, ppils_cd, dat_sak, dat_mod, dat_beig) FROM aw_ppils.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
 psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_rajons RESTART IDENTITY;"
 psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_rajons (kods, tips_cd, nosaukums, vkur_cd, vkur_tips, apstipr, apst_pak, statuss, sort_nos, dat_sak, dat_mod, dat_beig, atrib) FROM aw_rajons.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
 psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_vietu_centroidi RESTART IDENTITY;"
