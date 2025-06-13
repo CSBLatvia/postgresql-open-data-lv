@@ -214,8 +214,6 @@ CREATE TABLE IF NOT EXISTS vzd.nitis_zvb (
   ,pareja_zeme DECIMAL(10, 2) NULL
   );
 
-CREATE UNIQUE INDEX zvb_darijuma_id_idx ON vzd.nitis_zvb (darijuma_id);
-
 COMMENT ON TABLE vzd.nitis_zvb IS 'NĪTIS darījumi ar zemi un būvēm.';
 
 COMMENT ON COLUMN vzd.nitis_zvb.id IS 'ID.';
@@ -1043,7 +1041,7 @@ CREATE TABLE IF NOT EXISTS vzd.nitis_b_kad_apz (
   ,buvtilpums INT NULL
   ,ekspl_gads SMALLINT[] NULL
   ,arsienas SMALLINT[] NULL
-  ,nolietojums SMALLINT NULL
+  ,nolietojums TEXT NULL
   ,geom geometry(Geometry, 3059)
   ,atvk varchar(7)
   ,apkaime varchar(7)

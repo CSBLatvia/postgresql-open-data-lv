@@ -773,7 +773,7 @@ CREATE TEMPORARY TABLE IF NOT EXISTS nitis_b_kad_apz_tmp (
   ,buvtilpums INT NULL
   ,ekspl_gads SMALLINT[] NULL
   ,arsienas TEXT[] NULL
-  ,nolietojums SMALLINT NULL
+  ,nolietojums TEXT NULL
   );
 
 ----zvb.
@@ -843,7 +843,7 @@ SELECT a.dar__juma_id::INT
   ,CASE 
     WHEN a.b__ves_fiziskais_nolietojums___ LIKE 'NULL'
       THEN NULL
-    ELSE a.b__ves_fiziskais_nolietojums___::SMALLINT
+    ELSE a.b__ves_fiziskais_nolietojums___
     END
 FROM vzd.zvb a
 LEFT JOIN (
@@ -911,7 +911,7 @@ SELECT DISTINCT a.dar__juma_id::INT
   ,CASE 
     WHEN a.b__ves_fiziskais_nolietojums___ LIKE 'NULL'
       THEN NULL
-    ELSE a.b__ves_fiziskais_nolietojums___::SMALLINT
+    ELSE a.b__ves_fiziskais_nolietojums___
     END
 FROM vzd.tg a
 LEFT JOIN (
