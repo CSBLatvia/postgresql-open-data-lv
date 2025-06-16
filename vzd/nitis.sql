@@ -1153,79 +1153,79 @@ WHERE f.darijuma_id IS NULL;
 ---nitis_zv.
 UPDATE vzd.nitis_zv
 SET atvk = '0023200'
-WHERE LOWER(adrese) LIKE '%ādaži%'
+WHERE adrese ILIKE '%ādaži%'
   AND atvk = '0023401';
 
 UPDATE vzd.nitis_zv
 SET atvk = '0025210'
-WHERE LOWER(adrese) LIKE '%iecava,%'
+WHERE adrese ILIKE '%iecava,%'
   AND atvk = '0025460';
 
 UPDATE vzd.nitis_zv
 SET atvk = '0020220'
-WHERE LOWER(adrese) LIKE '%koknese,%'
+WHERE adrese ILIKE '%koknese,%'
   AND atvk = '0020470';
 
 UPDATE vzd.nitis_zv
 SET atvk = '0034220'
-WHERE LOWER(adrese) LIKE '%ķekava,%'
+WHERE adrese ILIKE '%ķekava,%'
   AND atvk = '0034421';
 
 UPDATE vzd.nitis_zv
 SET atvk = '0039200'
-WHERE LOWER(adrese) LIKE '% mārupe,%'
+WHERE adrese ILIKE '% mārupe,%'
   AND atvk = '0039411';
 
 ---nitis_zvb.
 UPDATE vzd.nitis_zvb
 SET atvk = '0023200'
-WHERE LOWER(adrese) LIKE '%ādaži%'
+WHERE adrese ILIKE '%ādaži%'
   AND atvk = '0023401';
 
 UPDATE vzd.nitis_zvb
 SET atvk = '0025210'
-WHERE LOWER(adrese) LIKE '%iecava,%'
+WHERE adrese ILIKE '%iecava,%'
   AND atvk = '0025460';
 
 UPDATE vzd.nitis_zvb
 SET atvk = '0020220'
-WHERE LOWER(adrese) LIKE '%koknese,%'
+WHERE adrese ILIKE '%koknese,%'
   AND atvk = '0020470';
 
 UPDATE vzd.nitis_zvb
 SET atvk = '0034220'
-WHERE LOWER(adrese) LIKE '%ķekava,%'
+WHERE adrese ILIKE '%ķekava,%'
   AND atvk = '0034421';
 
 UPDATE vzd.nitis_zvb
 SET atvk = '0039200'
-WHERE LOWER(adrese) LIKE '% mārupe,%'
+WHERE adrese ILIKE '% mārupe,%'
   AND atvk = '0039411';
 
 ---nitis_b.
 UPDATE vzd.nitis_b
 SET atvk = '0023200'
-WHERE LOWER(adrese) LIKE '%ādaži%'
+WHERE adrese ILIKE '%ādaži%'
   AND atvk = '0023401';
 
 UPDATE vzd.nitis_b
 SET atvk = '0025210'
-WHERE LOWER(adrese) LIKE '%iecava,%'
+WHERE adrese ILIKE '%iecava,%'
   AND atvk = '0025460';
 
 UPDATE vzd.nitis_b
 SET atvk = '0020220'
-WHERE LOWER(adrese) LIKE '%koknese,%'
+WHERE adrese ILIKE '%koknese,%'
   AND atvk = '0020470';
 
 UPDATE vzd.nitis_b
 SET atvk = '0034220'
-WHERE LOWER(adrese) LIKE '%ķekava,%'
+WHERE adrese ILIKE '%ķekava,%'
   AND atvk = '0034421';
 
 UPDATE vzd.nitis_b
 SET atvk = '0039200'
-WHERE LOWER(adrese) LIKE '% mārupe,%'
+WHERE adrese ILIKE '% mārupe,%'
   AND atvk = '0039411';
 
 END;

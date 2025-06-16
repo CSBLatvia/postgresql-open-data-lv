@@ -775,9 +775,9 @@ AS (
   CROSS JOIN n
   LEFT JOIN vzd.adreses_his_ekas_split x ON a.id = x.id
   WHERE a.tips_cd = 108
-    AND LOWER(a.std) LIKE '% ' || n.nosaukums || ' %'
+    AND a.std ILIKE '% ' || n.nosaukums || ' %'
     AND (
-      LOWER(b.std) NOT LIKE '% ' || n.nosaukums || ' %'
+      b.std NOT ILIKE '% ' || n.nosaukums || ' %'
       OR b.std IS NULL
       )
     AND a.std NOT LIKE '"%", %'
