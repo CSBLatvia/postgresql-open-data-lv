@@ -16,7 +16,7 @@ LEFT OUTER JOIN kk_shp.kkbuilding s ON u.code = s.code
 WHERE u.object_code < 6000000000
   AND s.code IS NULL
   AND u.date_deleted IS NULL
-  AND uorig.code = u.code;
+  AND uorig.id = u.id;
 
 ---Ģeometrija, būves kods vai saistītās zemes vienības kadastra apzīmējums mainījies.
 UPDATE vzd.nivkis_buves
@@ -188,7 +188,7 @@ FROM vzd.nivkis_zemes_vienibas u
 LEFT OUTER JOIN kk_shp.kkparcel s ON u.code = s.code
 WHERE s.code IS NULL
   AND u.date_deleted IS NULL
-  AND uorig.code = u.code;
+  AND uorig.id = u.id;
 
 ---Ģeometrija, tās aktualizēšanas datums vai zemes vienības tips mainījies.
 UPDATE vzd.nivkis_zemes_vienibas
@@ -276,7 +276,7 @@ FROM vzd.nivkis_zemes_vienibu_dalas u
 LEFT OUTER JOIN kk_shp.kkparcelpart s ON u.code = s.code
 WHERE s.code IS NULL
   AND u.date_deleted IS NULL
-  AND uorig.code = u.code;
+  AND uorig.id = u.id;
 
 ---Ģeometrija vai zemes vienības kadastra apzīmējums mainījies.
 UPDATE vzd.nivkis_zemes_vienibu_dalas
@@ -357,8 +357,7 @@ LEFT OUTER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE s.code IS NULL
   AND u.date_deleted IS NULL
-  AND uorig.code = u.code
-  AND uorig.parcel_code = u.parcel_code;
+  AND uorig.id = u.id;
 
 ---Ģeometrija mainījusies.
 UPDATE vzd.nivkis_servituti
