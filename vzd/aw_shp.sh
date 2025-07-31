@@ -4,7 +4,7 @@
 set -e
 
 cd $HOME/data/aw_shp
-wget -q https://data.gov.lv/dati/dataset/0c5e1a3b-0097-45a9-afa9-7f7262f3f623/resource/f539e8df-d4e4-4fc1-9f94-d25b662a4c38/download/aw_shp.zip
+wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/resource/b643b1b3-223f-4394-9beb-18524f8b0b82/download/aw_shp.zip
 7za x aw_shp.zip -y -bsp0 -bso0
 rm Autoceli.*
 rm Pilsetas.*
