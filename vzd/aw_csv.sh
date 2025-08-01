@@ -24,6 +24,9 @@ wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/re
 wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/resource/5950bf88-4441-470f-9e13-efcbd79bc1f0/download/aw_pagasts_his.csv
 wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/resource/87e2c4e5-13d9-4142-9052-8a6e9f094479/download/aw_pilseta_his.csv
 wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/resource/e7f17c92-fad4-4153-bef5-670a321c4ec1/download/aw_rajons.csv
+wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/resource/7d98b01c-60d3-46e6-8583-320a83301174/download/aw_doc_nl.csv
+wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/resource/b1552dfe-605f-4260-9602-e5e6886bb754/download/aw_doc_tg.csv
+wget -q https://data.gov.lv/dati/dataset/6b06a7e8-dedf-4705-a47b-2a7c51177473/resource/2dbe69b1-6b14-4f35-98b8-2a64119af163/download/aw_doc_vieta.csv
 export PGPASSWORD=
 psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_ciems RESTART IDENTITY;"
 psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_ciems (kods, tips_cd, nosaukums, vkur_cd, vkur_tips, apstipr, apst_pak, statuss, sort_nos, dat_sak, dat_mod, dat_beig, atrib, std) FROM aw_ciems.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
@@ -59,6 +62,12 @@ psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_rajons RESTART IDEN
 psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_rajons (kods, tips_cd, nosaukums, vkur_cd, vkur_tips, apstipr, apst_pak, statuss, sort_nos, dat_sak, dat_mod, dat_beig, atrib) FROM aw_rajons.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
 psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_vietu_centroidi RESTART IDENTITY;"
 psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_vietu_centroidi (kods, tips_cd, nosaukums, vkur_cd, vkur_tips, std, koord_x, koord_y, dd_n, dd_e) FROM aw_vietu_centroidi.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
+psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_doc_nl RESTART IDENTITY;"
+psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_doc_nl (adreses_kods, adreses_veids, autors, datums, veids, numurs, nosaukums) FROM aw_doc_nl.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
+psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_doc_tg RESTART IDENTITY;"
+psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_doc_tg (adreses_kods, adreses_veids, autors, datums, veids, numurs, nosaukums) FROM aw_doc_tg.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
+psql -U scheduler -d spatial -w -c "TRUNCATE TABLE aw_csv.aw_doc_vieta RESTART IDENTITY;"
+psql -U scheduler -d spatial -w -c "\COPY aw_csv.aw_doc_vieta (adreses_kods, adreses_veids, autors, datums, veids, numurs, nosaukums) FROM aw_doc_vieta.csv WITH (FORMAT CSV, QUOTE '\"', ESCAPE '\"', HEADER, FORCE_NULL *)"
 cd ..
 rm -r aw_csv
 psql -U scheduler -d spatial -w -c "CALL vzd.adreses()"
