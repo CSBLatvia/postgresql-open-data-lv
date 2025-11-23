@@ -972,7 +972,7 @@ CREATE TABLE vzd.nivkis_premisegroup (
   ,"PremiseGroupBuildingFloor" SMALLINT NOT NULL
   ,"PremiseGroupPremiseCount" SMALLINT NOT NULL
   ,"PremiseGroupArea" DECIMAL(7, 1)
-  ,"PremiseGroupSurveyDate" DATE NOT NULL
+  ,"PremiseGroupSurveyDate" DATE
   ,"PremiseGroupAcceptionYears" SMALLINT[]
   ,"NotForLandBook" BOOLEAN
   ,date_created DATE NOT NULL
