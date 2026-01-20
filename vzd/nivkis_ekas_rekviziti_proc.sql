@@ -4,9 +4,16 @@ LANGUAGE 'plpgsql'
 
 AS $BODY$BEGIN
 
-DROP MATERIALIZED VIEW IF EXISTS vzd.nivkis_ekas_rekviziti;
+CREATE TEMPORARY TABLE nivkis_building_element
+AS
+SELECT "BuildingCadastreNr"
+  ,UNNEST("MaterialKindName") "MaterialKindName1"
+FROM vzd.nivkis_building_element
+WHERE "BuildingElementName" = 10;
 
-CREATE MATERIALIZED VIEW vzd.nivkis_ekas_rekviziti
+DROP TABLE IF EXISTS vzd.nivkis_ekas_rekviziti;
+
+CREATE TABLE vzd.nivkis_ekas_rekviziti
 AS
 WITH p
 AS (
@@ -20,13 +27,6 @@ AS (
   LEFT OUTER JOIN vzd.nivkis_ownership_personstatus op2 ON o2."PersonStatus" = op2.id
   GROUP BY p."ObjectCadastreNrData"
     ,oo2."OwnershipStatus"
-  )
-  ,e
-AS (
-  SELECT "BuildingCadastreNr"
-    ,UNNEST("MaterialKindName") "MaterialKindName1"
-  FROM vzd.nivkis_building_element
-  WHERE "BuildingElementName" = 1
   )
   ,a
 AS (
@@ -50,7 +50,7 @@ AS (
   FROM vzd.nivkis_buves a
   LEFT OUTER JOIN vzd.nivkis_building b ON a.code = b."BuildingCadastreNr"
     AND b.date_deleted IS NULL
-  LEFT OUTER JOIN e ON a.code = e."BuildingCadastreNr"
+  LEFT OUTER JOIN nivkis_building_element e ON a.code = e."BuildingCadastreNr"
   LEFT OUTER JOIN vzd.nivkis_building_usekind u ON b."BuildingUseKindId" = u."BuildingUseKindId"
   LEFT OUTER JOIN vzd.nivkis_building_materialkind m ON b."MaterialKindId" = m."MaterialKindId"
   LEFT OUTER JOIN vzd.nivkis_address v ON a.code = v."ObjectCadastreNr"
