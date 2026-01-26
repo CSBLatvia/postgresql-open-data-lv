@@ -192,4 +192,4 @@ rm -r valuation
 psql -U scheduler -d spatial -w -c "CALL vzd.nivkis_valuation_proc()"
 
 # Refresh materialized view nivkis_ekas_rekviziti.
-psql -U scheduler -d spatial -w -c "REFRESH MATERIALIZED VIEW vzd.nivkis_ekas_rekviziti;"
+psql -U scheduler -d spatial -w -c "CALL vzd.nivkis_ekas_rekviziti_proc()"
