@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS vzd.nitis_zv (
   ,darijuma_summa DECIMAL(10, 2) NOT NULL
   ,zemes_skaititajs BIGINT NULL
   ,zemes_saucejs BIGINT NULL
-  ,apbuveta SMALLINT NOT NULL
+  ,apbuveta SMALLINT
   ,kopplatiba DECIMAL(10, 2) NOT NULL
   --,lauksaimniecibas_zeme DECIMAL(10, 2) NULL
   ,aramzeme DECIMAL(10, 2) NULL

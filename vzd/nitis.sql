@@ -101,7 +101,11 @@ SELECT DISTINCT SUBSTRING(a.filename, strpos(a.filename, '.') - 4, 4)::SMALLINT
       THEN NULL
     ELSE zemes_da__as__sauc__js_::BIGINT
     END
-  ,vai_zeme_ir_apb__v__ta__0_nav_1_ir_::SMALLINT
+  ,CASE
+    WHEN y.darijuma_id IS NOT NULL
+      THEN NULL
+    ELSE vai_zeme_ir_apb__v__ta__0_nav_1_ir_::SMALLINT
+    END
   ,CASE 
     WHEN p__rdot___zemes_kopplat__ba__m2 LIKE 'NULL'
       THEN NULL
