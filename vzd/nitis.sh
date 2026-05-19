@@ -6,6 +6,7 @@ set -e
 # Par pamatu izmantots https://gist.github.com/laacz/8dfb7b69221790eb8d88e5fb91b9b088.
 # Dzēš esošās un lejupielādē jaunās datnes, atarhivē tās un izdzēš arhīvus.
 cd $HOME/data/nitis
+rm *.csv
 
 FILES=$(curl https://data.gov.lv/dati/lv/dataset/f8a8a929-28d5-4f4f-85e9-062168cb4aba.jsonld | jq -r '."@graph"[]."dcat:accessURL"."@id" | select(. != null)')
 
@@ -20,6 +21,9 @@ rm *.xlsx
 
 # Apvieno periodus, pirmajā kolonnā pievieno faila nosaukumu.
 dos2unix *.csv
+[ -f ZV_CSV.csv ] && mv ZV_CSV.csv ZV_CSV_$(date +%Y).csv
+[ -f ZVB_CSV.csv ] && mv ZVB_CSV.csv ZVB_CSV_$(date +%Y).csv
+[ -f TG_CSV.csv ] && mv TG_CSV.csv TG_CSV_$(date +%Y).csv
 awk '(NR == 1){print "\"Filename;" $0 "\""}(FNR > 1){print FILENAME ";" $0}' ZV_CSV_*.csv > zv.csv
 awk '(NR == 1){print "\"Filename;" $0 "\""}(FNR > 1){print FILENAME ";" $0}' ZVB_CSV_*.csv > zvb.csv
 awk '(NR == 1){print "\"Filename;" $0 "\""}(FNR > 1){print FILENAME ";" $0}' TG_CSV_*.csv > tg.csv

@@ -355,8 +355,6 @@ CREATE TABLE IF NOT EXISTS vzd.nitis_tg (
   ,buves_kad_apz TEXT[] NOT NULL
   );
 
-CREATE UNIQUE INDEX tg_darijuma_id_idx ON vzd.nitis_tg (darijuma_id);
-
 COMMENT ON TABLE vzd.nitis_tg IS 'NĪTIS darījumi ar telpu grupām.';
 
 COMMENT ON COLUMN vzd.nitis_tg.id IS 'ID.';
