@@ -19,6 +19,7 @@ for file in $(find . -name '*.xml'); do
   sed -i -e 's/\r//g' -e 's/\t/ /g' -e 's/\\/\//g' "${file}"
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_property_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -39,6 +40,7 @@ psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_owners
 for file in $(find . -name '*.xml'); do
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_ownership_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -59,6 +61,7 @@ psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_parcel
 for file in $(find . -name '*.xml'); do
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_parcel_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -79,6 +82,7 @@ psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_parcel
 for file in $(find . -name '*.xml'); do
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_parcelpart_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -100,6 +104,7 @@ for file in $(find . -name '*.xml'); do
   sed -i -e 's/\r//g' -e 's/\t/ /g' -e 's/\\/\//g' "${file}"
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_building_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -121,6 +126,7 @@ for file in $(find . -name '*.xml'); do
   sed -i -e 's/\r//g' -e 's/\t/ /g' -e 's/\\/\//g' "${file}"
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_premisegroup_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -141,6 +147,7 @@ psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_addres
 for file in $(find . -name '*.xml'); do
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_address_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -161,6 +168,7 @@ psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_encumb
 for file in $(find . -name '*.xml'); do
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_encumbrance_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -181,6 +189,7 @@ psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_mark_t
 for file in $(find . -name '*.xml'); do
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_mark_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -201,6 +210,7 @@ psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_valuat
 for file in $(find . -name '*.xml'); do
   tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
+  sed -i 's/[[:space:]]*xmlns:[a-zA-Z0-9_-]*="[^"]*"//g; s/[[:space:]]*xmlns="[^"]*"//g; s/[[:space:]]*xsi:schemaLocation="[^"]*"//g' "$file" #Noņem namespace deklarācijas.
   echo "\COPY vzd.nivkis_valuation_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
