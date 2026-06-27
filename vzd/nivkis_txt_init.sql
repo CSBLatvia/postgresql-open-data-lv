@@ -969,7 +969,7 @@ CREATE TABLE vzd.nivkis_premisegroup (
   ,"BuildingCadastreNr" VARCHAR(14) NOT NULL
   ,"PremiseGroupName" TEXT NOT NULL
   ,"PremiseGroupUseKindId" SMALLINT NOT NULL
-  ,"PremiseGroupBuildingFloor" SMALLINT NOT NULL
+  ,"PremiseGroupBuildingFloor" SMALLINT
   ,"PremiseGroupPremiseCount" SMALLINT NOT NULL
   ,"PremiseGroupArea" DECIMAL(7, 1)
   ,"PremiseGroupSurveyDate" DATE
