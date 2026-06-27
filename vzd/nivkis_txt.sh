@@ -17,7 +17,7 @@ psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_property_tmp
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_property_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
   sed -i -e 's/\r//g' -e 's/\t/ /g' -e 's/\\/\//g' "${file}"
-  tr -d '\n' <"$file" >"${file}_new"
+  tr '\n' ' ' <"$file" >"${file}_new"
   mv "${file}_new" $file
   echo "\COPY vzd.nivkis_property_tmp FROM" "${file}" >> script.sql
 done
@@ -37,6 +37,8 @@ rm ownership.zip
 psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_ownership_tmp;"
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_ownership_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_ownership_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -55,6 +57,8 @@ rm parcel.zip
 psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_parcel_tmp;"
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_parcel_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_parcel_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -73,6 +77,8 @@ rm parcelpart.zip
 psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_parcelpart_tmp;"
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_parcelpart_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_parcelpart_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -92,6 +98,8 @@ psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_building_tmp
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_building_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
   sed -i -e 's/\r//g' -e 's/\t/ /g' -e 's/\\/\//g' "${file}"
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_building_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -111,6 +119,8 @@ psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_premisegroup
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_premisegroup_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
   sed -i -e 's/\r//g' -e 's/\t/ /g' -e 's/\\/\//g' "${file}"
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_premisegroup_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -129,6 +139,8 @@ rm address.zip
 psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_address_tmp;"
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_address_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_address_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -147,6 +159,8 @@ rm encumbrance.zip
 psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_encumbrance_tmp;"
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_encumbrance_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_encumbrance_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -165,6 +179,8 @@ rm mark.zip
 psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_mark_tmp;"
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_mark_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_mark_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
@@ -183,6 +199,8 @@ rm valuation.zip
 psql -U scheduler -d spatial -w -c "DROP TABLE IF EXISTS vzd.nivkis_valuation_tmp;"
 psql -U scheduler -d spatial -w -c "CREATE TABLE IF NOT EXISTS vzd.nivkis_valuation_tmp (data XML);"
 for file in $(find . -name '*.xml'); do
+  tr '\n' ' ' <"$file" >"${file}_new"
+  mv "${file}_new" $file
   echo "\COPY vzd.nivkis_valuation_tmp FROM" "${file}" >> script.sql
 done
 psql -U scheduler -d spatial -w -f script.sql
