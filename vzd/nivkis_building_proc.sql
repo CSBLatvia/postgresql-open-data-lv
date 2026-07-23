@@ -447,9 +447,9 @@ IF date_files > date_db THEN
       ,t."BuildingElementMaterialKind"
       ,(XPATH('/ConstructionDataList/BuildingElementName/text()', "ConstructionDataList")) [1]::TEXT "BuildingElementName"
       --,t2."BuildingElementConstructionKind"
-      ,ARRAY(SELECT DISTINCT e FROM UNNEST(STRING_TO_ARRAY((XPATH('/ConstructionDataList/BuildingElementAcceptionYears/text()', "ConstructionDataList")) [1]::TEXT, ', ')::SMALLINT[]) a(e) ORDER BY e) "BuildingElementAcceptionYears"
+      --,ARRAY(SELECT DISTINCT e FROM UNNEST(STRING_TO_ARRAY((XPATH('/ConstructionDataList/BuildingElementAcceptionYears/text()', "ConstructionDataList")) [1]::TEXT, ', ')::SMALLINT[]) a(e) ORDER BY e) "BuildingElementAcceptionYears"
       ,(XPATH('/ConstructionDataList/BuildingElementExploitYear/text()', "ConstructionDataList")) [1]::TEXT::SMALLINT "BuildingElementExploitYear"
-      ,(XPATH('/ConstructionDataList/BuildingElementDeprecation/text()', "ConstructionDataList")) [1]::TEXT::SMALLINT "BuildingElementDeprecation"
+      --,(XPATH('/ConstructionDataList/BuildingElementDeprecation/text()', "ConstructionDataList")) [1]::TEXT::SMALLINT "BuildingElementDeprecation"
     FROM b
     LEFT JOIN LATERAL(SELECT UNNEST((XPATH('/ConstructionDataList/BuildingElementMaterialKindList/BuildingElementMaterialKind', "ConstructionDataList"))::TEXT[]) "BuildingElementMaterialKind") t ON TRUE
       --LEFT JOIN LATERAL (SELECT UNNEST((XPATH('/ConstructionDataList/BuildingElementConstractionKindList/BuildingElementConstructionKind', "ConstructionDataList"))::TEXT[]) "BuildingElementConstructionKind") t2 ON TRUE
@@ -460,9 +460,9 @@ IF date_files > date_db THEN
       ,"BuildingElementMaterialKind"::XML "BuildingElementMaterialKind"
       ,"BuildingElementName"
       --,"BuildingElementConstructionKind"::XML "BuildingElementConstructionKind"
-      ,"BuildingElementAcceptionYears"
+      --,"BuildingElementAcceptionYears"
       ,"BuildingElementExploitYear"
-      ,"BuildingElementDeprecation"
+      --,"BuildingElementDeprecation"
     FROM c
     )
     ,e
@@ -473,24 +473,24 @@ IF date_files > date_db THEN
       ,"BuildingElementName"
       --,(XPATH('/BuildingElementConstructionKind/ConstructionKindId/text()', "BuildingElementConstructionKind")) [1]::TEXT::SMALLINT "ConstructionKindId"
       --,(XPATH('/BuildingElementConstructionKind/ConstructionKindName/text()', "BuildingElementConstructionKind")) [1]::TEXT "ConstructionKindName"
-      ,"BuildingElementAcceptionYears"
+      --,"BuildingElementAcceptionYears"
       ,"BuildingElementExploitYear"
-      ,"BuildingElementDeprecation"
+      --,"BuildingElementDeprecation"
     FROM d
     )
   SELECT "BuildingCadastreNr"
     ,ARRAY_AGG("MaterialKindName" ORDER BY "MaterialKindName") "MaterialKindName"
     ,"BuildingElementName"
     --,ARRAY_AGG("ConstructionKindName" ORDER BY "ConstructionKindName") "ConstructionKindName"
-    ,"BuildingElementAcceptionYears"
+    --,"BuildingElementAcceptionYears"
     ,"BuildingElementExploitYear"
-    ,"BuildingElementDeprecation"
+    --,"BuildingElementDeprecation"
   FROM e
   GROUP BY "BuildingCadastreNr"
     ,"BuildingElementName"
-    ,"BuildingElementAcceptionYears"
+    --,"BuildingElementAcceptionYears"
     ,"BuildingElementExploitYear"
-    ,"BuildingElementDeprecation";
+    --,"BuildingElementDeprecation";
 
   --Papildina BuildingElementName klasifikatoru.
   INSERT INTO vzd.nivkis_building_elementname ("BuildingElementName")
@@ -509,9 +509,9 @@ IF date_files > date_db THEN
     ,a."MaterialKindName"
     ,b.id "BuildingElementName"
     --,a."ConstructionKindName"
-    ,a."BuildingElementAcceptionYears"
+    --,a."BuildingElementAcceptionYears"
     ,a."BuildingElementExploitYear"
-    ,a."BuildingElementDeprecation"
+    --,a."BuildingElementDeprecation"
   FROM nivkis_building_tmp_element a
   INNER JOIN vzd.nivkis_building_elementname b ON a."BuildingElementName" = b."BuildingElementName";
 
@@ -538,9 +538,9 @@ IF date_files > date_db THEN
     AND (
       COALESCE(nivkis_building_element."MaterialKindName", '{}') != COALESCE(s."MaterialKindName", '{}')
       --OR COALESCE(nivkis_building_element."ConstructionKindName", '{}') != COALESCE(s."ConstructionKindName", '{}')
-      OR COALESCE(nivkis_building_element."BuildingElementAcceptionYears", '{0}') != COALESCE(s."BuildingElementAcceptionYears", '{0}')
+      --OR COALESCE(nivkis_building_element."BuildingElementAcceptionYears", '{0}') != COALESCE(s."BuildingElementAcceptionYears", '{0}')
       OR COALESCE(nivkis_building_element."BuildingElementExploitYear", 0) != COALESCE(s."BuildingElementExploitYear", 0)
-      OR COALESCE(nivkis_building_element."BuildingElementDeprecation", 0) != COALESCE(s."BuildingElementDeprecation", 0)
+      --OR COALESCE(nivkis_building_element."BuildingElementDeprecation", 0) != COALESCE(s."BuildingElementDeprecation", 0)
       );
 
   INSERT INTO vzd.nivkis_building_element (
@@ -548,18 +548,18 @@ IF date_files > date_db THEN
     ,"MaterialKindName"
     ,"BuildingElementName"
     --,"ConstructionKindName"
-    ,"BuildingElementAcceptionYears"
+    --,"BuildingElementAcceptionYears"
     ,"BuildingElementExploitYear"
-    ,"BuildingElementDeprecation"
+    --,"BuildingElementDeprecation"
     ,date_created
     )
   SELECT s."BuildingCadastreNr"
     ,s."MaterialKindName"
     ,s."BuildingElementName"
     --,s."ConstructionKindName"
-    ,s."BuildingElementAcceptionYears"
+    --,s."BuildingElementAcceptionYears"
     ,s."BuildingElementExploitYear"
-    ,s."BuildingElementDeprecation"
+    --,s."BuildingElementDeprecation"
     ,d."PreparedDate"
   FROM nivkis_building_tmp_element_2 s
   CROSS JOIN nivkis_building_tmp_prepareddate d
@@ -568,9 +568,9 @@ IF date_files > date_db THEN
   WHERE (
       COALESCE(u."MaterialKindName", '{}') != COALESCE(s."MaterialKindName", '{}')
       --OR COALESCE(u."ConstructionKindName", '{}') != COALESCE(s."ConstructionKindName", '{}')
-      OR COALESCE(u."BuildingElementAcceptionYears", '{0}') != COALESCE(s."BuildingElementAcceptionYears", '{0}')
+      --OR COALESCE(u."BuildingElementAcceptionYears", '{0}') != COALESCE(s."BuildingElementAcceptionYears", '{0}')
       OR COALESCE(u."BuildingElementExploitYear", 0) != COALESCE(s."BuildingElementExploitYear", 0)
-      OR COALESCE(u."BuildingElementDeprecation", 0) != COALESCE(s."BuildingElementDeprecation", 0)
+      --OR COALESCE(u."BuildingElementDeprecation", 0) != COALESCE(s."BuildingElementDeprecation", 0)
       )
     AND u.date_deleted = d."PreparedDate";
 
@@ -580,18 +580,18 @@ IF date_files > date_db THEN
     ,"MaterialKindName"
     ,"BuildingElementName"
     --,"ConstructionKindName"
-    ,"BuildingElementAcceptionYears"
+    --,"BuildingElementAcceptionYears"
     ,"BuildingElementExploitYear"
-    ,"BuildingElementDeprecation"
+    --,"BuildingElementDeprecation"
     ,date_created
     )
   SELECT s."BuildingCadastreNr"
     ,s."MaterialKindName"
     ,s."BuildingElementName"
     --,s."ConstructionKindName"
-    ,s."BuildingElementAcceptionYears"
+    --,s."BuildingElementAcceptionYears"
     ,s."BuildingElementExploitYear"
-    ,s."BuildingElementDeprecation"
+    --,s."BuildingElementDeprecation"
     ,d."PreparedDate"
   FROM nivkis_building_tmp_element_2 s
   CROSS JOIN nivkis_building_tmp_prepareddate d
@@ -692,8 +692,8 @@ IF date_files > date_db THEN
   SELECT "BuildingCadastreNr"
     ,"ImprovementDate"
     ,(XPATH('/ImprovementData/ImprovementTypeName/text()', "ImprovementData")) [1]::TEXT "ImprovementTypeName"
-    ,(XPATH('/ImprovementData/ImprovementDetectionForm/text()', "ImprovementData")) [1]::TEXT "ImprovementDetectionForm"
-    ,(XPATH('/ImprovementData/ImprovementQuantity/text()', "ImprovementData")) [1]::TEXT "ImprovementQuantity"
+    --,(XPATH('/ImprovementData/ImprovementDetectionForm/text()', "ImprovementData")) [1]::TEXT "ImprovementDetectionForm"
+    --,(XPATH('/ImprovementData/ImprovementQuantity/text()', "ImprovementData")) [1]::TEXT "ImprovementQuantity"
   FROM b;
 
   --nivkis_building_improvement.
@@ -718,50 +718,50 @@ IF date_files > date_db THEN
     AND COALESCE(nivkis_building_improvement."ImprovementDate", '1900-01-01') = COALESCE(s."ImprovementDate", '1900-01-01')
     AND nivkis_building_improvement."ImprovementTypeName" = s."ImprovementTypeName"
     AND nivkis_building_improvement.date_deleted IS NULL
-    AND (
+    /*AND (
       COALESCE(nivkis_building_improvement."ImprovementDetectionForm", '') != COALESCE(s."ImprovementDetectionForm", '')
       OR COALESCE(nivkis_building_improvement."ImprovementQuantity", '') != COALESCE(s."ImprovementQuantity", '')
-      );
+      )*/;
 
   INSERT INTO vzd.nivkis_building_improvement (
     "BuildingCadastreNr"
     ,"ImprovementDate"
     ,"ImprovementTypeName"
-    ,"ImprovementDetectionForm"
-    ,"ImprovementQuantity"
+    --,"ImprovementDetectionForm"
+    --,"ImprovementQuantity"
     ,date_created
     )
   SELECT s."BuildingCadastreNr"
     ,s."ImprovementDate"
     ,s."ImprovementTypeName"
-    ,s."ImprovementDetectionForm"
-    ,s."ImprovementQuantity"
+    --,s."ImprovementDetectionForm"
+    --,s."ImprovementQuantity"
     ,d."PreparedDate"
   FROM nivkis_building_tmp_improvement s
   CROSS JOIN nivkis_building_tmp_prepareddate d
   INNER JOIN vzd.nivkis_building_improvement u ON s."BuildingCadastreNr" = u."BuildingCadastreNr"
     AND COALESCE(s."ImprovementDate", '1900-01-01') = COALESCE(u."ImprovementDate", '1900-01-01')
     AND s."ImprovementTypeName" = u."ImprovementTypeName"
-  WHERE (
+  WHERE /*(
       COALESCE(u."ImprovementDetectionForm", '') != COALESCE(s."ImprovementDetectionForm", '')
       OR COALESCE(u."ImprovementQuantity", '') != COALESCE(s."ImprovementQuantity", '')
       )
-    AND u.date_deleted = d."PreparedDate";
+    AND*/ u.date_deleted = d."PreparedDate";
 
   ---Jauns kadastra objekts.
   INSERT INTO vzd.nivkis_building_improvement (
     "BuildingCadastreNr"
     ,"ImprovementDate"
     ,"ImprovementTypeName"
-    ,"ImprovementDetectionForm"
-    ,"ImprovementQuantity"
+    --,"ImprovementDetectionForm"
+    --,"ImprovementQuantity"
     ,date_created
     )
   SELECT s."BuildingCadastreNr"
     ,s."ImprovementDate"
     ,s."ImprovementTypeName"
-    ,s."ImprovementDetectionForm"
-    ,s."ImprovementQuantity"
+    --,s."ImprovementDetectionForm"
+    --,s."ImprovementQuantity"
     ,d."PreparedDate"
   FROM nivkis_building_tmp_improvement s
   CROSS JOIN nivkis_building_tmp_prepareddate d

@@ -816,9 +816,9 @@ CREATE TABLE vzd.nivkis_building_element (
   ,"MaterialKindName" TEXT[]
   ,"BuildingElementName" SMALLINT
   --,"ConstructionKindName" TEXT[]
-  ,"BuildingElementAcceptionYears" SMALLINT[]
+  --,"BuildingElementAcceptionYears" SMALLINT[] --Netiek publicēts kopš VZD.PPS_AD_v0.13.
   ,"BuildingElementExploitYear" SMALLINT
-  ,"BuildingElementDeprecation" SMALLINT
+  --,"BuildingElementDeprecation" SMALLINT --Netiek publicēts kopš VZD.PPS_AD_v0.13.
   ,date_created DATE NOT NULL
   ,date_deleted DATE NULL
   );
@@ -835,11 +835,11 @@ COMMENT ON COLUMN vzd.nivkis_building_element."BuildingElementName" IS 'Elementa
 
 --COMMENT ON COLUMN vzd.nivkis_building_element."ConstructionKindName" IS 'Elementa konstrukcijas veida nosaukums.';
 
-COMMENT ON COLUMN vzd.nivkis_building_element."BuildingElementAcceptionYears" IS 'Elementa ekspluatācijā pieņemšanas gadi.';
+--COMMENT ON COLUMN vzd.nivkis_building_element."BuildingElementAcceptionYears" IS 'Elementa ekspluatācijā pieņemšanas gadi.';
 
 COMMENT ON COLUMN vzd.nivkis_building_element."BuildingElementExploitYear" IS 'Elementa ekspluatācijas uzsākšanas gads.';
 
-COMMENT ON COLUMN vzd.nivkis_building_element."BuildingElementDeprecation" IS 'Elementa nolietojums, %.';
+--COMMENT ON COLUMN vzd.nivkis_building_element."BuildingElementDeprecation" IS 'Elementa nolietojums, %.';
 
 COMMENT ON COLUMN vzd.nivkis_building_element.date_created IS 'Izveidošanas datums. Atbilst datu kopā norādītajam datējumam.';
 
@@ -920,7 +920,7 @@ GRANT SELECT, UPDATE
   ON SEQUENCE vzd.nivkis_building_amount_id_seq
   TO scheduler;
 
---nivkis_building_improvement (labiekārtojumu informācija).
+--nivkis_building_improvement (piederumu informācija).
 DROP TABLE IF EXISTS vzd.nivkis_building_improvement;
 
 CREATE TABLE vzd.nivkis_building_improvement (
@@ -928,25 +928,25 @@ CREATE TABLE vzd.nivkis_building_improvement (
   ,"BuildingCadastreNr" VARCHAR(14) NOT NULL
   ,"ImprovementDate" DATE
   ,"ImprovementTypeName" TEXT
-  ,"ImprovementDetectionForm" TEXT
-  ,"ImprovementQuantity" TEXT
+  --,"ImprovementDetectionForm" TEXT --Netiek publicēts kopš VZD.PPS_AD_v0.13.
+  --,"ImprovementQuantity" TEXT --Netiek publicēts kopš VZD.PPS_AD_v0.13.
   ,date_created DATE NOT NULL
   ,date_deleted DATE NULL
   );
 
-COMMENT ON TABLE vzd.nivkis_building_improvement IS 'Nekustamā īpašuma valsts kadastra informācijas sistēmas atvērtie teksta dati par būvju labiekārtojumiem.';
+COMMENT ON TABLE vzd.nivkis_building_improvement IS 'Nekustamā īpašuma valsts kadastra informācijas sistēmas atvērtie teksta dati par būvju piederumiem.';
 
 COMMENT ON COLUMN vzd.nivkis_building_improvement.id IS 'ID.';
 
 COMMENT ON COLUMN vzd.nivkis_building_improvement."BuildingCadastreNr" IS 'Būves kadastra apzīmējums.';
 
-COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementDate" IS 'Labiekārtojumu datums.';
+COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementDate" IS 'Piederumu datums.';
 
-COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementTypeName" IS 'Labiekārtojuma veids.';
+COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementTypeName" IS 'Piederuma veids.';
 
-COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementDetectionForm" IS 'Labiekārtojuma noteikšanas veids.';
+--COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementDetectionForm" IS 'Piederuma noteikšanas veids.';
 
-COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementQuantity" IS 'Labiekārtojuma apjoms.';
+--COMMENT ON COLUMN vzd.nivkis_building_improvement."ImprovementQuantity" IS 'Piederuma apjoms.';
 
 COMMENT ON COLUMN vzd.nivkis_building_improvement.date_created IS 'Izveidošanas datums. Atbilst datu kopā norādītajam datējumam.';
 
