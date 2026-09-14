@@ -363,7 +363,7 @@ CREATE INDEX kkwayrestriction_poly_geom_idx ON kkwayrestriction_poly USING GIST 
 
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_servituti uorig
-SET date_deleted = '2026-09-12'
+SET date_deleted = CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
 LEFT OUTER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
@@ -373,7 +373,7 @@ WHERE s.code IS NULL
 
 ---Ģeometrija mainījusies.
 UPDATE vzd.nivkis_servituti
-SET date_deleted = '2026-09-12'
+SET date_deleted = CURRENT_DATE - 1
 FROM kkwayrestriction_poly s
 WHERE nivkis_servituti.code = s.code
   AND nivkis_servituti.parcel_code = s.parcelcode
@@ -389,12 +389,12 @@ INSERT INTO vzd.nivkis_servituti (
 SELECT s.code
   ,s.parcelcode
   ,s.geom
-  ,'2026-09-12'
+  ,CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
 INNER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE ST_Equals(u.geom, s.geom) = FALSE
-  AND u.date_deleted = '2026-09-12'
+  AND u.date_deleted = CURRENT_DATE - 1
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 ---Jaunas.
@@ -407,7 +407,7 @@ INSERT INTO vzd.nivkis_servituti (
 SELECT s.code
   ,s.parcelcode
   ,s.geom
-  ,'2026-09-12'
+  ,CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
 RIGHT OUTER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
@@ -435,7 +435,7 @@ INSERT INTO vzd.nivkis_servituti (
 SELECT s.code
   ,s.parcelcode
   ,ST_Multi(s.geom)
-  ,'2026-09-12'
+  ,CURRENT_DATE - 1
 FROM tmp u
 INNER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
