@@ -349,11 +349,23 @@ INNER JOIN kk_shp.kkparcelpart s ON u.code = s.code
 WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 --Apgrūtinājumu ceļa servitūtu teritorijas.
+DROP TABLE IF EXISTS kkwayrestriction_poly;
+
+CREATE TEMPORARY TABLE kkwayrestriction_poly AS
+SELECT ST_Union(ST_MakeValid(geom)) geom
+  ,code
+  ,parcelcode
+FROM kk_shp.kkwayrestriction
+GROUP BY code
+  ,parcelcode;
+
+CREATE INDEX kkwayrestriction_poly_geom_idx ON kkwayrestriction_poly USING GIST (geom);
+
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_servituti uorig
-SET date_deleted = CURRENT_DATE - 1
+SET date_deleted = '2026-09-12'
 FROM vzd.nivkis_servituti u
-LEFT OUTER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
+LEFT OUTER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE s.code IS NULL
   AND u.date_deleted IS NULL
@@ -361,12 +373,12 @@ WHERE s.code IS NULL
 
 ---Ģeometrija mainījusies.
 UPDATE vzd.nivkis_servituti
-SET date_deleted = CURRENT_DATE - 1
-FROM kk_shp.kkwayrestriction s
+SET date_deleted = '2026-09-12'
+FROM kkwayrestriction_poly s
 WHERE nivkis_servituti.code = s.code
   AND nivkis_servituti.parcel_code = s.parcelcode
   AND nivkis_servituti.date_deleted IS NULL
-  AND ST_Equals(nivkis_servituti.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE;
+  AND ST_Equals(nivkis_servituti.geom, s.geom) = FALSE;
 
 INSERT INTO vzd.nivkis_servituti (
   code
@@ -376,13 +388,13 @@ INSERT INTO vzd.nivkis_servituti (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
-  ,CURRENT_DATE - 1
+  ,s.geom
+  ,'2026-09-12'
 FROM vzd.nivkis_servituti u
-INNER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
+INNER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
-WHERE ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
-  AND u.date_deleted = CURRENT_DATE - 1
+WHERE ST_Equals(u.geom, s.geom) = FALSE
+  AND u.date_deleted = '2026-09-12'
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
 ---Jaunas.
@@ -394,10 +406,10 @@ INSERT INTO vzd.nivkis_servituti (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
-  ,CURRENT_DATE - 1
+  ,s.geom
+  ,'2026-09-12'
 FROM vzd.nivkis_servituti u
-RIGHT OUTER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
+RIGHT OUTER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE u.code IS NULL
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
@@ -422,10 +434,10 @@ INSERT INTO vzd.nivkis_servituti (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
-  ,CURRENT_DATE - 1
+  ,ST_Multi(s.geom)
+  ,'2026-09-12'
 FROM tmp u
-INNER JOIN kk_shp.kkwayrestriction s ON u.code = s.code
+INNER JOIN kkwayrestriction_poly s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
