@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS vzd.adreses_ekas (
   ,pnod_cd INT
   ,for_build BOOLEAN NOT NULL
   ,plan_adr BOOLEAN NOT NULL
-  ,geom geometry(Point, 3059)
+  ,geom geometry(Point, 10306)
   );
 
 --Pievieno dzēstās ēku adrešu koordinātas.
@@ -406,7 +406,7 @@ CREATE TABLE vzd.adreses_ekas (
   ,pnod_cd INT
   ,for_build BOOLEAN NOT NULL
   ,plan_adr BOOLEAN NOT NULL
-  ,geom geometry(Point, 3059)
+  ,geom geometry(Point, 10306)
   );
 
 COMMENT ON TABLE vzd.adreses_ekas IS 'Papildus dati par ēku un apbūvei paredzētu zemes vienību adresācijas objektiem.';
@@ -434,7 +434,7 @@ SELECT kods
   ,pnod_cd
   ,for_build
   ,plan_adr
-  ,ST_SetSRID(ST_MakePoint(koord_y, koord_x), 3059)
+  ,ST_SetSRID(ST_MakePoint(koord_y, koord_x), 10306)
 FROM aw_csv.aw_eka;
 
 CREATE INDEX adreses_ekas_geom_idx ON vzd.adreses_ekas USING GIST (geom);

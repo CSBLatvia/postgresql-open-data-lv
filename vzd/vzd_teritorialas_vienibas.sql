@@ -19,7 +19,7 @@ EXECUTE 'CREATE TABLE vzd.teritorialas_vienibas_' || to_char(current_timestamp, 
   ,l0_type SMALLINT NULL
   ,nuts3_code VARCHAR(5) NULL
   ,nuts3_name VARCHAR(50) NULL
-  ,geom geometry(MultiPolygon, 3059) NOT NULL
+  ,geom geometry(MultiPolygon, 10306) NOT NULL
   )';
 
 EXECUTE 'CREATE INDEX teritorialas_vienibas_' || to_char(current_timestamp, 'YYYYMMDD') || '_geom_idx ON vzd.teritorialas_vienibas_' || to_char(current_timestamp, 'YYYYMMDD') || ' USING GIST (geom)';

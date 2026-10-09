@@ -5,7 +5,7 @@ CREATE TABLE vzd.ciemi (
   ,code INTEGER NOT NULL
   ,code_version SMALLINT NOT NULL
   ,name VARCHAR(25) NOT NULL
-  ,geom geometry(MultiPolygon, 3059) NOT NULL
+  ,geom geometry(MultiPolygon, 10306) NOT NULL
   ,date_created DATE NOT NULL
   ,date_deleted DATE NULL
   );

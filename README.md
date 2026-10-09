@@ -13,7 +13,7 @@ Pievieno rindu: `TZ=Europe/Riga`
 `sudo systemctl restart cron`
 
 Nepieciešamā programmatūra:
-* PostgreSQL ar paplašinājumiem PostGIS un [PostgreSQL OGR Foreign Data Wrapper](https://github.com/pramsey/pgsql-ogr-fdw),
+* PostgreSQL ar paplašinājumiem PostGIS un [PostgreSQL OGR Foreign Data Wrapper](https://github.com/pramsey/pgsql-ogr-fdw), LKS-2020 atbalstam nepieciešama vismaz PROJ 9.6.1 versija,
 * wget,
 * [jq](https://stedolan.github.io/jq/),
 * p7zip.
