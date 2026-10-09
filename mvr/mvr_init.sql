@@ -67,7 +67,7 @@ CREATE TABLE mvr.mvr_imported (
   ,plant_audze BOOLEAN
   ,forestry_c SMALLINT NOT NULL
   ,vmd_headfo TEXT NOT NULL
-  ,geom geometry(MultiPolygon, 3059)
+  ,geom geometry(MultiPolygon, 10306)
   ,date_created DATE NOT NULL
   ,date_deleted DATE
   );

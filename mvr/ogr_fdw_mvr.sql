@@ -9,6 +9,8 @@ ALTER SERVER mvr OWNER TO editor;
 
 IMPORT FOREIGN SCHEMA ogr_all FROM SERVER mvr INTO mvr;
 
+ALTER FOREIGN TABLE mvr.mvr RENAME COLUMN objectid TO id;
+
 GRANT SELECT
   ON TABLE mvr.mvr
   TO scheduler;

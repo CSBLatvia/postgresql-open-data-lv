@@ -20,9 +20,9 @@ done
 rm *.pdf
 
 7za x \*.7z -y -bsp0 -bso0
-rm *.7z
-rm *.sbn
-rm *.sbx
+rm -f *.7z
+rm -f *.sbn
+rm -f *.sbx
 
 # Apvieno lejupielādētos shapefile.
 merged_file="./mvr.shp"
