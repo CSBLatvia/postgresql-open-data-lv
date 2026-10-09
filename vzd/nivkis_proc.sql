@@ -8,11 +8,37 @@ DO $$
 BEGIN
 
 --Ēkas.
+DROP TABLE IF EXISTS kkbuilding_tmp;
+
+CREATE TEMPORARY TABLE kkbuilding_tmp AS
+WITH c
+AS (
+  SELECT code
+    ,objectcode::BIGINT objectcode
+    ,parcelcode
+    ,(ST_Dump(ST_Multi(ST_MakeValid(geom)))).geom geom
+  FROM kk_shp.kkbuilding
+  )
+SELECT code
+  ,objectcode
+  ,parcelcode
+  ,ST_Multi(ST_Union(geom)) geom
+FROM c
+WHERE ST_GeometryType(geom) IN (
+    'ST_Polygon'
+    ,'ST_MultiPolygon'
+    )
+GROUP BY code
+  ,objectcode
+  ,parcelcode;
+
+CREATE INDEX kkbuilding_tmp_geom_idx ON kkbuilding_tmp USING GIST (geom);
+
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_buves uorig
 SET date_deleted = CURRENT_DATE - 1 --Šeit un turpmāk nosacījums balstās pieņēmumā, ka procedūra tiek izpildīta dienu pēc jaunāko datu publicēšanas (svētdienās).
 FROM vzd.nivkis_buves u
-LEFT OUTER JOIN kk_shp.kkbuilding s ON u.code = s.code
+LEFT OUTER JOIN kkbuilding_tmp s ON u.code = s.code
 WHERE u.object_code < 6000000000
   AND s.code IS NULL
   AND u.date_deleted IS NULL
@@ -21,14 +47,14 @@ WHERE u.object_code < 6000000000
 ---Ģeometrija, būves kods vai saistītās zemes vienības kadastra apzīmējums mainījies.
 UPDATE vzd.nivkis_buves
 SET date_deleted = CURRENT_DATE - 1
-FROM kk_shp.kkbuilding s
+FROM kkbuilding_tmp s
 WHERE nivkis_buves.code = s.code
   AND nivkis_buves.object_code < 6000000000
   AND nivkis_buves.date_deleted IS NULL
   AND (
     nivkis_buves.parcel_code != s.parcelcode
-    OR nivkis_buves.object_code != s.objectcode::BIGINT
-    OR ST_Equals(nivkis_buves.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR nivkis_buves.object_code != s.objectcode
+    OR ST_Equals(nivkis_buves.geom, s.geom) = FALSE
     );
 
 INSERT INTO vzd.nivkis_buves (
@@ -39,20 +65,19 @@ INSERT INTO vzd.nivkis_buves (
   ,date_created
   )
 SELECT s.code
-  ,s.objectcode::BIGINT
+  ,s.objectcode
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
-INNER JOIN kk_shp.kkbuilding s ON u.code = s.code
+INNER JOIN kkbuilding_tmp s ON u.code = s.code
 WHERE u.object_code < 6000000000
   AND (
     u.parcel_code != s.parcelcode
-    OR u.object_code != s.objectcode::BIGINT
-    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR u.object_code != s.objectcode
+    OR ST_Equals(u.geom, s.geom) = FALSE
     )
-  AND u.date_deleted = CURRENT_DATE - 1
-  AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+  AND u.date_deleted = CURRENT_DATE - 1;
 
 ---Jaunas.
 INSERT INTO vzd.nivkis_buves (
@@ -63,14 +88,13 @@ INSERT INTO vzd.nivkis_buves (
   ,date_created
   )
 SELECT s.code
-  ,s.objectcode::BIGINT
+  ,s.objectcode
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
-RIGHT OUTER JOIN kk_shp.kkbuilding s ON u.code = s.code
-WHERE u.code IS NULL
-  AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+RIGHT OUTER JOIN kkbuilding_tmp s ON u.code = s.code
+WHERE u.code IS NULL;
 
 ---Agrāk dzēstas.
 DROP TABLE IF EXISTS tmp;
@@ -90,36 +114,61 @@ INSERT INTO vzd.nivkis_buves (
   ,date_created
   )
 SELECT s.code
-  ,s.objectcode::BIGINT
+  ,s.objectcode
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM tmp u
-INNER JOIN kk_shp.kkbuilding s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+INNER JOIN kkbuilding_tmp s ON u.code = s.code;
 
 --Inženierbūves.
+DROP TABLE IF EXISTS kkengineeringstructurepoly_tmp;
+
+CREATE TEMPORARY TABLE kkengineeringstructurepoly_tmp AS
+WITH c
+AS (
+  SELECT code
+    ,objectcode::BIGINT objectcode
+    ,parcelcode
+    ,(ST_Dump(ST_Multi(ST_MakeValid(geom)))).geom geom
+  FROM kk_shp.kkengineeringstructurepoly
+  )
+SELECT code
+  ,objectcode
+  ,parcelcode
+  ,ST_Multi(ST_Union(geom)) geom
+FROM c
+WHERE ST_GeometryType(geom) IN (
+    'ST_Polygon'
+    ,'ST_MultiPolygon'
+    )
+GROUP BY code
+  ,objectcode
+  ,parcelcode;
+
+CREATE INDEX kkengineeringstructurepoly_tmp_geom_idx ON kkengineeringstructurepoly_tmp USING GIST (geom);
+
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_buves
 SET date_deleted = CURRENT_DATE - 1
 WHERE object_code >= 6000000000
   AND code NOT IN (
     SELECT code
-    FROM kk_shp.kkengineeringstructurepoly
+    FROM kkengineeringstructurepoly_tmp
     )
   AND date_deleted IS NULL;
 
 ---Ģeometrija, būves kods vai saistītās zemes vienības kadastra apzīmējums mainījies.
 UPDATE vzd.nivkis_buves
 SET date_deleted = CURRENT_DATE - 1
-FROM kk_shp.kkengineeringstructurepoly s
+FROM kkengineeringstructurepoly_tmp s
 WHERE nivkis_buves.code = s.code
   AND nivkis_buves.object_code >= 6000000000
   AND nivkis_buves.date_deleted IS NULL
   AND (
     nivkis_buves.parcel_code != s.parcelcode
-    OR nivkis_buves.object_code != s.objectcode::BIGINT
-    OR ST_Equals(nivkis_buves.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR nivkis_buves.object_code != s.objectcode
+    OR ST_Equals(nivkis_buves.geom, s.geom) = FALSE
     );
 
 INSERT INTO vzd.nivkis_buves (
@@ -130,20 +179,19 @@ INSERT INTO vzd.nivkis_buves (
   ,date_created
   )
 SELECT s.code
-  ,s.objectcode::BIGINT
+  ,s.objectcode
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
-INNER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
+INNER JOIN kkengineeringstructurepoly_tmp s ON u.code = s.code
 WHERE u.object_code >= 6000000000
   AND (
     u.parcel_code != s.parcelcode
-    OR u.object_code != s.objectcode::BIGINT
-    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR u.object_code != s.objectcode
+    OR ST_Equals(u.geom, s.geom) = FALSE
     )
-  AND u.date_deleted = CURRENT_DATE - 1
-  AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+  AND u.date_deleted = CURRENT_DATE - 1;
 
 ---Jaunas.
 INSERT INTO vzd.nivkis_buves (
@@ -154,14 +202,13 @@ INSERT INTO vzd.nivkis_buves (
   ,date_created
   )
 SELECT s.code
-  ,s.objectcode::BIGINT
+  ,s.objectcode
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_buves u
-RIGHT OUTER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
-WHERE u.code IS NULL
-  AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+RIGHT OUTER JOIN kkengineeringstructurepoly_tmp s ON u.code = s.code
+WHERE u.code IS NULL;
 
 ---Agrāk dzēstas.
 INSERT INTO vzd.nivkis_buves (
@@ -172,20 +219,45 @@ INSERT INTO vzd.nivkis_buves (
   ,date_created
   )
 SELECT s.code
-  ,s.objectcode::BIGINT
+  ,s.objectcode
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM tmp u
-INNER JOIN kk_shp.kkengineeringstructurepoly s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+INNER JOIN kkengineeringstructurepoly_tmp s ON u.code = s.code;
 
 --Zemes vienības.
+DROP TABLE IF EXISTS kkparcel_tmp;
+
+CREATE TEMPORARY TABLE kkparcel_tmp AS
+WITH c
+AS (
+  SELECT code
+    ,geom_act_d
+    ,objectcode::BIGINT objectcode
+    ,(ST_Dump(ST_Multi(ST_MakeValid(geom)))).geom geom
+  FROM kk_shp.kkparcel
+  )
+SELECT code
+  ,geom_act_d
+  ,objectcode
+  ,ST_Multi(ST_Union(geom)) geom
+FROM c
+WHERE ST_GeometryType(geom) IN (
+    'ST_Polygon'
+    ,'ST_MultiPolygon'
+    )
+GROUP BY code
+  ,geom_act_d
+  ,objectcode;
+
+CREATE INDEX kkparcel_tmp_geom_idx ON kkparcel_tmp USING GIST (geom);
+
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_zemes_vienibas uorig
 SET date_deleted = CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibas u
-LEFT OUTER JOIN kk_shp.kkparcel s ON u.code = s.code
+LEFT OUTER JOIN kkparcel_tmp s ON u.code = s.code
 WHERE s.code IS NULL
   AND u.date_deleted IS NULL
   AND uorig.id = u.id;
@@ -193,13 +265,13 @@ WHERE s.code IS NULL
 ---Ģeometrija, tās aktualizēšanas datums vai zemes vienības tips mainījies.
 UPDATE vzd.nivkis_zemes_vienibas
 SET date_deleted = CURRENT_DATE - 1
-FROM kk_shp.kkparcel s
+FROM kkparcel_tmp s
 WHERE nivkis_zemes_vienibas.code = s.code
   AND nivkis_zemes_vienibas.date_deleted IS NULL
   AND (
     nivkis_zemes_vienibas.geom_actual_date != s.geom_act_d
-    OR nivkis_zemes_vienibas.object_code != s.objectcode::BIGINT
-    OR ST_Equals(nivkis_zemes_vienibas.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR nivkis_zemes_vienibas.object_code != s.objectcode
+    OR ST_Equals(nivkis_zemes_vienibas.geom, s.geom) = FALSE
     );
 
 INSERT INTO vzd.nivkis_zemes_vienibas (
@@ -211,18 +283,17 @@ INSERT INTO vzd.nivkis_zemes_vienibas (
   )
 SELECT s.code
   ,s.geom_act_d
-  ,s.objectcode::BIGINT
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.objectcode
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibas u
-INNER JOIN kk_shp.kkparcel s ON u.code = s.code
+INNER JOIN kkparcel_tmp s ON u.code = s.code
 WHERE (
     u.geom_actual_date != s.geom_act_d
-    OR u.object_code != s.objectcode::BIGINT
-    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR u.object_code != s.objectcode
+    OR ST_Equals(u.geom, s.geom) = FALSE
     )
-  AND u.date_deleted = CURRENT_DATE - 1
-  AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+  AND u.date_deleted = CURRENT_DATE - 1;
 
 ---Jaunas.
 INSERT INTO vzd.nivkis_zemes_vienibas (
@@ -234,13 +305,12 @@ INSERT INTO vzd.nivkis_zemes_vienibas (
   )
 SELECT s.code
   ,s.geom_act_d
-  ,s.objectcode::BIGINT
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.objectcode
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibas u
-RIGHT OUTER JOIN kk_shp.kkparcel s ON u.code = s.code
-WHERE u.code IS NULL
-  AND COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+RIGHT OUTER JOIN kkparcel_tmp s ON u.code = s.code
+WHERE u.code IS NULL;
 
 ---Agrāk dzēstas.
 DROP TABLE IF EXISTS tmp;
@@ -261,19 +331,41 @@ INSERT INTO vzd.nivkis_zemes_vienibas (
   )
 SELECT s.code
   ,s.geom_act_d
-  ,s.objectcode::BIGINT
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.objectcode
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM tmp u
-INNER JOIN kk_shp.kkparcel s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+INNER JOIN kkparcel_tmp s ON u.code = s.code;
 
 --Zemes vienību daļas.
+DROP TABLE IF EXISTS kkparcelpart_tmp;
+
+CREATE TEMPORARY TABLE kkparcelpart_tmp AS
+WITH c
+AS (
+  SELECT code
+    ,parcelcode
+    ,(ST_Dump(ST_Multi(ST_MakeValid(geom)))).geom geom
+  FROM kk_shp.kkparcelpart
+  )
+SELECT code
+  ,parcelcode
+  ,ST_Multi(ST_Union(geom)) geom
+FROM c
+WHERE ST_GeometryType(geom) IN (
+    'ST_Polygon'
+    ,'ST_MultiPolygon'
+    )
+GROUP BY code
+  ,parcelcode;
+
+CREATE INDEX kkparcelpart_tmp_geom_idx ON kkparcelpart_tmp USING GIST (geom);
+
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_zemes_vienibu_dalas uorig
 SET date_deleted = CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibu_dalas u
-LEFT OUTER JOIN kk_shp.kkparcelpart s ON u.code = s.code
+LEFT OUTER JOIN kkparcelpart_tmp s ON u.code = s.code
 WHERE s.code IS NULL
   AND u.date_deleted IS NULL
   AND uorig.id = u.id;
@@ -281,12 +373,12 @@ WHERE s.code IS NULL
 ---Ģeometrija vai zemes vienības kadastra apzīmējums mainījies.
 UPDATE vzd.nivkis_zemes_vienibu_dalas
 SET date_deleted = CURRENT_DATE - 1
-FROM kk_shp.kkparcelpart s
+FROM kkparcelpart_tmp s
 WHERE nivkis_zemes_vienibu_dalas.code = s.code
   AND nivkis_zemes_vienibu_dalas.date_deleted IS NULL
   AND (
     nivkis_zemes_vienibu_dalas.parcel_code != s.parcelcode
-    OR ST_Equals(nivkis_zemes_vienibu_dalas.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR ST_Equals(nivkis_zemes_vienibu_dalas.geom, s.geom) = FALSE
     );
 
 INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
@@ -297,16 +389,15 @@ INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibu_dalas u
-INNER JOIN kk_shp.kkparcelpart s ON u.code = s.code
+INNER JOIN kkparcelpart_tmp s ON u.code = s.code
 WHERE (
     u.parcel_code != s.parcelcode
-    OR ST_Equals(u.geom, ST_Multi(ST_MakeValid(s.geom))) = FALSE
+    OR ST_Equals(u.geom, s.geom) = FALSE
     )
-  AND u.date_deleted = CURRENT_DATE - 1
-  AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+  AND u.date_deleted = CURRENT_DATE - 1;
 
 ---Jaunas.
 INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
@@ -317,12 +408,11 @@ INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_zemes_vienibu_dalas u
-RIGHT OUTER JOIN kk_shp.kkparcelpart s ON u.code = s.code
-WHERE u.code IS NULL
-  AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+RIGHT OUTER JOIN kkparcelpart_tmp s ON u.code = s.code
+WHERE u.code IS NULL;
 
 ---Agrāk dzēstas.
 DROP TABLE IF EXISTS tmp;
@@ -342,30 +432,40 @@ INSERT INTO vzd.nivkis_zemes_vienibu_dalas (
   )
 SELECT s.code
   ,s.parcelcode
-  ,ST_Multi(ST_MakeValid(s.geom))
+  ,s.geom
   ,CURRENT_DATE - 1
 FROM tmp u
-INNER JOIN kk_shp.kkparcelpart s ON u.code = s.code
-WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
+INNER JOIN kkparcelpart_tmp s ON u.code = s.code;
 
 --Apgrūtinājumu ceļa servitūtu teritorijas.
-DROP TABLE IF EXISTS kkwayrestriction_poly;
+DROP TABLE IF EXISTS kkwayrestriction_tmp;
 
-CREATE TEMPORARY TABLE kkwayrestriction_poly AS
-SELECT ST_Union(ST_MakeValid(geom)) geom
-  ,code
+CREATE TEMPORARY TABLE kkwayrestriction_tmp AS
+WITH c
+AS (
+  SELECT code
+    ,parcelcode
+    ,(ST_Dump(ST_Multi(ST_MakeValid(geom)))).geom geom
+  FROM kk_shp.kkwayrestriction
+  )
+SELECT code
   ,parcelcode
-FROM kk_shp.kkwayrestriction
+  ,ST_Multi(ST_Union(geom)) geom
+FROM c
+WHERE ST_GeometryType(geom) IN (
+    'ST_Polygon'
+    ,'ST_MultiPolygon'
+    )
 GROUP BY code
   ,parcelcode;
 
-CREATE INDEX kkwayrestriction_poly_geom_idx ON kkwayrestriction_poly USING GIST (geom);
+CREATE INDEX kkwayrestriction_tmp_geom_idx ON kkwayrestriction_tmp USING GIST (geom);
 
 ---Vairāk neeksistē.
 UPDATE vzd.nivkis_servituti uorig
 SET date_deleted = CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
-LEFT OUTER JOIN kkwayrestriction_poly s ON u.code = s.code
+LEFT OUTER JOIN kkwayrestriction_tmp s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE s.code IS NULL
   AND u.date_deleted IS NULL
@@ -374,7 +474,7 @@ WHERE s.code IS NULL
 ---Ģeometrija mainījusies.
 UPDATE vzd.nivkis_servituti
 SET date_deleted = CURRENT_DATE - 1
-FROM kkwayrestriction_poly s
+FROM kkwayrestriction_tmp s
 WHERE nivkis_servituti.code = s.code
   AND nivkis_servituti.parcel_code = s.parcelcode
   AND nivkis_servituti.date_deleted IS NULL
@@ -391,7 +491,7 @@ SELECT s.code
   ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
-INNER JOIN kkwayrestriction_poly s ON u.code = s.code
+INNER JOIN kkwayrestriction_tmp s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE ST_Equals(u.geom, s.geom) = FALSE
   AND u.date_deleted = CURRENT_DATE - 1
@@ -409,7 +509,7 @@ SELECT s.code
   ,s.geom
   ,CURRENT_DATE - 1
 FROM vzd.nivkis_servituti u
-RIGHT OUTER JOIN kkwayrestriction_poly s ON u.code = s.code
+RIGHT OUTER JOIN kkwayrestriction_tmp s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE u.code IS NULL
   AND COALESCE(s.geom::TEXT, '') != '';--Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
@@ -437,7 +537,7 @@ SELECT s.code
   ,ST_Multi(s.geom)
   ,CURRENT_DATE - 1
 FROM tmp u
-INNER JOIN kkwayrestriction_poly s ON u.code = s.code
+INNER JOIN kkwayrestriction_tmp s ON u.code = s.code
   AND u.parcel_code = s.parcelcode
 WHERE COALESCE(s.geom::TEXT, '') != ''; --Risinājums tam, ka IS NULL iekš ogr_fdw neatgriež rezultātus.
 
