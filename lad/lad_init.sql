@@ -6,7 +6,7 @@ CREATE TABLE lad.field_blocks (
   ,block_number VARCHAR(11) NOT NULL
   ,mla VARCHAR(5)
   ,valid_from TIMESTAMP
-  ,geom geometry(MultiPolygon, 3059) NOT NULL
+  ,geom geometry(MultiPolygon, 10306) NOT NULL
   ,date_created DATE NOT NULL
   ,date_deleted DATE
   );
@@ -53,7 +53,7 @@ CREATE TABLE lad.fields (
   ,aid_forms VARCHAR NOT NULL
   ,area_declared REAL NOT NULL
   ,data_changed_date TIMESTAMP NOT NULL
-  ,geom geometry(MultiPolygon, 3059) NOT NULL
+  ,geom geometry(MultiPolygon, 10306) NOT NULL
   ,date_created DATE NOT NULL
   ,date_deleted DATE
 );

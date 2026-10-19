@@ -10,7 +10,7 @@ CREATE TEMPORARY TABLE field_blocks_tmp (
   ,block_number VARCHAR
   ,mla VARCHAR
   ,valid_from TIMESTAMP
-  ,geom geometry(MultiPolygon, 3059)
+  ,geom geometry(MultiPolygon, 10306)
   );
 
 --Pagaidu datu tabulā importē visu datu kopu no WFS.

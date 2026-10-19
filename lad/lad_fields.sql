@@ -14,7 +14,7 @@ CREATE TEMPORARY TABLE fields_tmp (
   ,aid_forms VARCHAR
   ,area_declared REAL
   ,data_changed_date TIMESTAMP
-  ,geom geometry(MultiPolygon, 3059)
+  ,geom geometry(MultiPolygon, 10306)
   );
 
 --Pagaidu datu tabulā importē visu datu kopu no WFS.

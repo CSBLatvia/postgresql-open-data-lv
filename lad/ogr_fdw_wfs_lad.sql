@@ -12,7 +12,7 @@ ALTER SERVER wfs_lad_field_blocks OWNER TO editor;
 IMPORT FOREIGN SCHEMA ogr_all FROM SERVER wfs_lad_field_blocks INTO lad;
 
 GRANT SELECT
-  ON TABLE lad.lad_lauku_bloki
+  ON TABLE lad.lauku_bloki_lauku_bloki
   TO scheduler;
 
 --Lauki.
@@ -29,5 +29,5 @@ ALTER SERVER wfs_lad_fields OWNER TO editor;
 IMPORT FOREIGN SCHEMA ogr_all FROM SERVER wfs_lad_fields INTO lad;
 
 GRANT SELECT
-  ON TABLE lad.lad_lauki
+  ON TABLE lad.lauki_lauki
   TO scheduler;
