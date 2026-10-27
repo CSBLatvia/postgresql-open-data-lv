@@ -92,7 +92,7 @@ SELECT a.atrib
   ,REPLACE(a.nosaukums, ''nov.'', ''novads'')
   ,5
 FROM aw_shp.adm_rob a
-LEFT OUTER JOIN vzd.teritorialas_vienibas_' || to_char(current_timestamp, 'YYYYMMDD') || ' b ON ST_Contains(ST_Multi(a.geom), b.geom)
+LEFT OUTER JOIN vzd.teritorialas_vienibas_' || to_char(current_timestamp, 'YYYYMMDD') || ' b ON ST_Contains(ST_Multi(a.geom), (ST_MaximumInscribedCircle(b.geom)).center)
 WHERE b.l1_code IS NULL
   AND a.tips_cd = 113';
 
@@ -102,7 +102,7 @@ SET l0_code = s.atrib
   ,l0_name = REPLACE(s.nosaukums, ''nov.'', ''novads'')
   ,l0_type = 5
 FROM aw_shp.adm_rob s
-WHERE ST_Contains(ST_Multi(s.geom), vzd.teritorialas_vienibas_' || to_char(current_timestamp, 'YYYYMMDD') || '.geom)
+WHERE ST_Contains(ST_Multi(s.geom), (ST_MaximumInscribedCircle(vzd.teritorialas_vienibas_' || to_char(current_timestamp, 'YYYYMMDD') || '.geom)).center)
   AND l0_code IS NULL
   AND s.tips_cd = 113';
 
